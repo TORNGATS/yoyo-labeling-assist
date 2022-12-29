@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_md_README">
+
+<para>YoYo-SLA is a python module providing required functionalities to view/edit/modify labeled data using photo editing softwares like GIMP. The library supports various file formats such as xcf (gimp) and ora (OpenRaster).</para>
+<section xml:id="_md_README_1autotoc_md1">
+<title>Features</title>
+
+<para><itemizedlist>
+<listitem>
+<para>A customized version of OpenRaster file (*.orax).</para>
+</listitem><listitem>
+<para>A File loader for multi-layer imagery files (the loader load the file to a in-memory structure containing the layers, original image, metadata, and other properties)</para>
+</listitem><listitem>
+<para>Extension of the file loader for XCF files (*.xcf)</para>
+</listitem><listitem>
+<para>Extension of the file loader for ORA files (*.ora)</para>
+</listitem><listitem>
+<para>Extension of the file loader for ORAX files (*.orax)</para>
+</listitem><listitem>
+<para>Extension of the file loader for RLE files.</para>
+</listitem><listitem>
+<para>A File writer for multi-layer imagery files (updating the file structure based on the modifications made)</para>
+</listitem><listitem>
+<para>The in-memory structure should have lazy loading of the layers.</para>
+</listitem><listitem>
+<para>The in-memory structure should provide access to the metadata using [string index].</para>
+</listitem><listitem>
+<para>A Sequential loader for processing files inside a folder.</para>
+</listitem><listitem>
+<para>Convert from a multi-layer format to another multi-layer format.</para>
+</listitem><listitem>
+<para>A tool for opening the ORAX files in gimp (including the gimp plugin, linux file handler, and script to install the file handler).</para>
+</listitem><listitem>
+<para>A tool for converting all files in a folder from a file format to another file format.</para>
+</listitem></itemizedlist>
+</para>
+</section>
+<section xml:id="_md_README_1autotoc_md2">
+<title>Contributors</title>
+
+<para><itemizedlist>
+<listitem>
+<para>Parham Nooralishahi (Developer) </para>
+</listitem></itemizedlist>
+</para>
+</section>
+</section>

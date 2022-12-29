@@ -1,0 +1,16 @@
+\@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
+\contentsline {chapter}{\numberline {1}Yo\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Yo-\/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}S\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}LA \discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}: Segmentation Labeling Assistant}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Features}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Contributors}{1}{section.1.2}%
+\contentsline {chapter}{\numberline {2}Namespace Index}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Namespace List}{3}{section.2.1}%
+\contentsline {chapter}{\numberline {3}File Index}{5}{chapter.3}%
+\contentsline {section}{\numberline {3.1}File List}{5}{section.3.1}%
+\contentsline {chapter}{\numberline {4}Namespace Documentation}{7}{chapter.4}%
+\contentsline {section}{\numberline {4.1}yoyo66 Namespace Reference}{7}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Detailed Description}{7}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Yo\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Yo-\/\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}S\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}L\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}A is a python module providing required functionalities to view/edit/modify labeled data using photo editing softwares like G\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}I\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}M\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}P. The library supports various file formats such as xcf (gimp) and ora (\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Open\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Raster).}{7}{subsection.4.1.2}%
+\contentsline {chapter}{\numberline {5}File Documentation}{9}{chapter.5}%
+\contentsline {section}{\numberline {5.1}yoyo66/datastruct.py File Reference}{9}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Detailed Description}{9}{subsection.5.1.1}%
+\contentsline {chapter}{Index}{11}{section*.1}%

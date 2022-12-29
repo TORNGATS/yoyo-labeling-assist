@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_datastruct_8py">
+<title>yoyo66/datastruct.py File Reference</title>
+<indexterm><primary>yoyo66/datastruct.py</primary></indexterm>
+<para>
+
+<para>The in-memory data structure definition and all related utils. </para>
+ 
+</para>
+<section>
+<title>Detailed Description</title>
+
+<para>The in-memory data structure definition and all related utils. </para>
+
+<para><formalpara><title>Author</title>
+
+<para>Parham Nooralishahi </para>
+</formalpara>
+</para>
+</section>
+</section>

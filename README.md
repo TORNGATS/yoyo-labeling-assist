@@ -1,7 +1,7 @@
 
-# YoYo Labeling Assist
+# YoYo-SLA : Segmentation Labeling Assistant
 
-YoYo Labeling Assist is a python module providing required functionalities to view/edit/modify labeled data using photo editing softwares like GIMP. The library supports various file formats such as xcf (gimp) and ora (OpenRaster). 
+YoYo-SLA is a python module providing required functionalities to view/edit/modify labeled data using photo editing softwares like GIMP. The library supports various file formats such as xcf (gimp) and ora (OpenRaster). 
 
 ## Features
 
@@ -18,3 +18,7 @@ YoYo Labeling Assist is a python module providing required functionalities to vi
 * Convert from a multi-layer format to another multi-layer format.
 * A tool for opening the ORAX files in gimp (including the gimp plugin, linux file handler, and script to install the file handler).
 * A tool for converting all files in a folder from a file format to another file format.
+
+## Contributors
+
+* Parham Nooralishahi (Developer)
