@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_____init_____8py">
+<title>yoyo66/__init__.py File Reference</title>
+<indexterm><primary>yoyo66/__init__.py</primary></indexterm>
+<simplesect>
+    <title>Namespaces    </title>
+        <itemizedlist>
+            <listitem><para> <link linkend="_namespaceyoyo66">yoyo66</link></para>
+
+<para>YoYo-SLA : Segmentation Labeling Assistant. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+</section>

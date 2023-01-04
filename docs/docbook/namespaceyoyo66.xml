@@ -7,6 +7,13 @@
 <para>YoYo-SLA : Segmentation Labeling Assistant. </para>
  
 </para>
+<simplesect>
+    <title>Namespaces    </title>
+        <itemizedlist>
+            <listitem><para> <link linkend="_namespaceyoyo66_1_1datastruct">datastruct</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
 <section>
 <title>Detailed Description</title>
 

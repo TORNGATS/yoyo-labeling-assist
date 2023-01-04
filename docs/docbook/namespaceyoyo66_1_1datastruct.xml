@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_namespaceyoyo66_1_1datastruct">
+<title>yoyo66.datastruct Namespace Reference</title>
+<indexterm><primary>yoyo66.datastruct</primary></indexterm>
+<simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>class <link linkend="_classyoyo66_1_1datastruct_1_1InMemoryImage">InMemoryImage</link></para>
+
+<para>The definition of in-memory data structure is determined here. </para>
+</listitem>
+            <listitem><para>class <link linkend="_classyoyo66_1_1datastruct_1_1phmImage">phmImage</link></para>
+</listitem>
+            <listitem><para>class <link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link></para>
+
+<para><link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link> is a base class for layers inside a multi-layer image file. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Variables    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_namespaceyoyo66_1_1datastruct_1a4614a47a92e504adc184fb9b851af812">Dimension</link> = namedtuple(&apos;Dimension&apos;, [&apos;width&apos;, &apos;height&apos;])</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Variable Documentation</title>
+<anchor xml:id="_namespaceyoyo66_1_1datastruct_1a4614a47a92e504adc184fb9b851af812"/>    <section>
+    <title>Dimension</title>
+<indexterm><primary>Dimension</primary><secondary>yoyo66.datastruct</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct</primary><secondary>Dimension</secondary></indexterm>
+<para><computeroutput>yoyo66.datastruct.Dimension = namedtuple(&apos;Dimension&apos;, [&apos;width&apos;, &apos;height&apos;])</computeroutput></para></section>
+</section>
+</section>

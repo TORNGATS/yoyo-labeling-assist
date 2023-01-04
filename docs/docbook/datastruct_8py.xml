@@ -7,6 +7,37 @@
 <para>The in-memory data structure definition and all related utils. </para>
  
 </para>
+<simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>class <link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">yoyo66.datastruct.phmLayer</link></para>
+
+<para><link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link> is a base class for layers inside a multi-layer image file. </para>
+</listitem>
+            <listitem><para>class <link linkend="_classyoyo66_1_1datastruct_1_1phmImage">yoyo66.datastruct.phmImage</link></para>
+</listitem>
+            <listitem><para>class <link linkend="_classyoyo66_1_1datastruct_1_1InMemoryImage">yoyo66.datastruct.InMemoryImage</link></para>
+
+<para>The definition of in-memory data structure is determined here. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Namespaces    </title>
+        <itemizedlist>
+            <listitem><para> <link linkend="_namespaceyoyo66_1_1datastruct">yoyo66.datastruct</link></para>
+</listitem>
+            <listitem><para> <link linkend="_namespacedatastruct">datastruct</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Variables    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_namespaceyoyo66_1_1datastruct_1a4614a47a92e504adc184fb9b851af812">yoyo66.datastruct.Dimension</link> = namedtuple(&apos;Dimension&apos;, [&apos;width&apos;, &apos;height&apos;])</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
 <section>
 <title>Detailed Description</title>
 
@@ -14,7 +45,7 @@
 
 <para><formalpara><title>Author</title>
 
-<para>Parham Nooralishahi </para>
+<para>Parham Nooralishahi   </para>
 </formalpara>
 </para>
 </section>

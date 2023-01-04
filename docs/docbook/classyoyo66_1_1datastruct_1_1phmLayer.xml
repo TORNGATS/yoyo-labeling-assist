@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classyoyo66_1_1datastruct_1_1phmLayer">
+<title>yoyo66.datastruct.phmLayer Class Reference</title>
+<indexterm><primary>yoyo66.datastruct.phmLayer</primary></indexterm>
+<para>
+
+<para><link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link> is a base class for layers inside a multi-layer image file. </para>
+ 
+</para>
+<simplesect>
+    <title>Static Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmLayer_1a4b3e1de620dbeae1e08e633f90566bfb">float</link></para>
+</listitem>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmLayer_1ac01e3756471043e822fa6807220ef7c4">default</link></para>
+</listitem>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmLayer_1a68841cbc0d2f8c420908353a4f7084b1">bool</link></para>
+</listitem>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmLayer_1a3f76bd59e64d06c0dfa85e6886a530e2">Image</link></para>
+</listitem>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmLayer_1a379e8e68b62d4b16d92f86f293096fa0">int</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para><link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link> is a base class for layers inside a multi-layer image file. </para>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_classyoyo66_1_1datastruct_1_1phmLayer_1a68841cbc0d2f8c420908353a4f7084b1"/>    <section>
+    <title>bool</title>
+<indexterm><primary>bool</primary><secondary>yoyo66.datastruct.phmLayer</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmLayer</primary><secondary>bool</secondary></indexterm>
+<para><computeroutput>yoyo66.datastruct.phmLayer.bool<computeroutput>[static]</computeroutput></computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmLayer_1ac01e3756471043e822fa6807220ef7c4"/>    <section>
+    <title>default</title>
+<indexterm><primary>default</primary><secondary>yoyo66.datastruct.phmLayer</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmLayer</primary><secondary>default</secondary></indexterm>
+<para><computeroutput>yoyo66.datastruct.phmLayer.default<computeroutput>[static]</computeroutput></computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmLayer_1a4b3e1de620dbeae1e08e633f90566bfb"/>    <section>
+    <title>float</title>
+<indexterm><primary>float</primary><secondary>yoyo66.datastruct.phmLayer</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmLayer</primary><secondary>float</secondary></indexterm>
+<para><computeroutput>yoyo66.datastruct.phmLayer.float<computeroutput>[static]</computeroutput></computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmLayer_1a3f76bd59e64d06c0dfa85e6886a530e2"/>    <section>
+    <title>Image</title>
+<indexterm><primary>Image</primary><secondary>yoyo66.datastruct.phmLayer</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmLayer</primary><secondary>Image</secondary></indexterm>
+<para><computeroutput>yoyo66.datastruct.phmLayer.Image<computeroutput>[static]</computeroutput></computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmLayer_1a379e8e68b62d4b16d92f86f293096fa0"/>    <section>
+    <title>int</title>
+<indexterm><primary>int</primary><secondary>yoyo66.datastruct.phmLayer</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmLayer</primary><secondary>int</secondary></indexterm>
+<para><computeroutput>yoyo66.datastruct.phmLayer.int<computeroutput>[static]</computeroutput></computeroutput></para></section>
+<para>
+The documentation for this class was generated from the following file:</para>
+yoyo66/<link linkend="_datastruct_8py">datastruct.py</link></section>
+</section>

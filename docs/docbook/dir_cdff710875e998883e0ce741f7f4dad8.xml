@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_dir_cdff710875e998883e0ce741f7f4dad8">
+<title>yoyo66 Directory Reference</title>
+<indexterm><primary>yoyo66 Directory Reference</primary></indexterm>
+<simplesect>
+    <title>Files    </title>
+        <itemizedlist>
+            <listitem><para>file <link linkend="_____init_____8py">__init__.py</link></para>
+</listitem>
+            <listitem><para>file <link linkend="_datastruct_8py">datastruct.py</link></para>
+
+<para>The in-memory data structure definition and all related utils. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+</section>

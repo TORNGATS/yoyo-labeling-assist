@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['yoyo_2dsla_20_3a_20segmentation_20labeling_20assistant_1',['YoYo-SLA : Segmentation Labeling Assistant',['../md_README.html',1,'']]],
-  ['yoyo66_2',['yoyo66',['../namespaceyoyo66.html',1,'']]]
+  ['bool_5',['bool',['../classyoyo66_1_1datastruct_1_1phmLayer.html#a68841cbc0d2f8c420908353a4f7084b1',1,'yoyo66::datastruct::phmLayer']]]
 ];

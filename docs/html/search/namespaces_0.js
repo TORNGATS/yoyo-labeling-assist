@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['yoyo66_3',['yoyo66',['../namespaceyoyo66.html',1,'']]]
+  ['datastruct_40',['datastruct',['../namespacedatastruct.html',1,'']]]
 ];

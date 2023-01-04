@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classyoyo66_1_1datastruct_1_1phmImage">
+<title>yoyo66.datastruct.phmImage Class Reference</title>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary></indexterm>
+Inheritance diagram for yoyo66.datastruct.phmImage:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="classyoyo66_1_1datastruct_1_1phmImage__inherit__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+Collaboration diagram for yoyo66.datastruct.phmImage:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="classyoyo66_1_1datastruct_1_1phmImage__coll__graph.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para>def <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a7b957ab6778952291903207dda269fb1">__init__</link> (self, str <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1aea98afd2d6832b48a3623e16ba4cce70">filepath</link>, str <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a16ee3dd77eea1eb741fc731af680f571">title</link>=None)</para>
+</listitem>
+            <listitem><para>Union[Dict, <link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link>] <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1abc878edfa0f54a9800404a7001126161">__getitem__</link> (self, key)</para>
+</listitem>
+            <listitem><para>def <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a6a14b081e6f2f9216c5bb8ce8078da5b">get_property</link> (self, prop)</para>
+</listitem>
+            <listitem><para>def <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a19b5b975ccd9c23b81323ee875774ecf">set_property</link> (self, prop, value)</para>
+</listitem>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link> <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1adc88efce900a672ad803f37c87e03bae">load_layer</link> (self, str layer_name)</para>
+</listitem>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link> <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a19caabb1963b9b843e0236dff53ceedf">load_layer_by_index</link> (self, int index)</para>
+</listitem>
+            <listitem><para>Tuple[<link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link>] <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a34c8040155ce4eaeef23a61d7f6f7928">get_all_layers</link> (self)</para>
+</listitem>
+            <listitem><para>Tuple[str] <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a01cef1994b82dca0ea61005f8c457261">get_layer_names</link> (self)</para>
+</listitem>
+            <listitem><para>def <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1ad3e108d5d0ca0314ffe88150654889eb">get_original_image</link> (self)</para>
+</listitem>
+            <listitem><para>Tuple[str] <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a956a0105c7ae7a6103ba09db93bba055">layer_names</link> (self)</para>
+</listitem>
+            <listitem><para>Image <link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a4e2212f70a5b75417a5182d7999bf5e4">original_image</link> (self)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1aea98afd2d6832b48a3623e16ba4cce70">filepath</link></para>
+</listitem>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a8415f3c64c432470db87192304191f07">filename</link></para>
+</listitem>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a16ee3dd77eea1eb741fc731af680f571">title</link></para>
+</listitem>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1aa49867ffb9d2bf52248cab2e65614aed">dimension</link></para>
+</listitem>
+            <listitem><para><link linkend="_classyoyo66_1_1datastruct_1_1phmImage_1a0b98016c67a93d458fda7375119e9ff8">properties</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1a7b957ab6778952291903207dda269fb1"/>    <section>
+    <title>__init__()</title>
+<indexterm><primary>__init__</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>__init__</secondary></indexterm>
+<para><computeroutput>def yoyo66.datastruct.phmImage.__init__ ( self, str filepath, str  title = <computeroutput>None</computeroutput>
+)</computeroutput></para></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1abc878edfa0f54a9800404a7001126161"/>    <section>
+    <title>__getitem__()</title>
+<indexterm><primary>__getitem__</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>__getitem__</secondary></indexterm>
+<para><computeroutput> Union[Dict, <link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link>]  yoyo66.datastruct.phmImage.__getitem__ ( self,  key)</computeroutput></para><para>
+Reimplemented in <link linkend="_classyoyo66_1_1datastruct_1_1InMemoryImage_1a31a375a17279e1228466b94084723267">yoyo66.datastruct.InMemoryImage</link>.</para>
+    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1a34c8040155ce4eaeef23a61d7f6f7928"/>    <section>
+    <title>get_all_layers()</title>
+<indexterm><primary>get_all_layers</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>get_all_layers</secondary></indexterm>
+<para><computeroutput> Tuple[<link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link>] yoyo66.datastruct.phmImage.get_all_layers ( self)</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1a01cef1994b82dca0ea61005f8c457261"/>    <section>
+    <title>get_layer_names()</title>
+<indexterm><primary>get_layer_names</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>get_layer_names</secondary></indexterm>
+<para><computeroutput> Tuple[str] yoyo66.datastruct.phmImage.get_layer_names ( self)</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1ad3e108d5d0ca0314ffe88150654889eb"/>    <section>
+    <title>get_original_image()</title>
+<indexterm><primary>get_original_image</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>get_original_image</secondary></indexterm>
+<para><computeroutput>def yoyo66.datastruct.phmImage.get_original_image ( self)</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1a6a14b081e6f2f9216c5bb8ce8078da5b"/>    <section>
+    <title>get_property()</title>
+<indexterm><primary>get_property</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>get_property</secondary></indexterm>
+<para><computeroutput>def yoyo66.datastruct.phmImage.get_property ( self,  prop)</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1a956a0105c7ae7a6103ba09db93bba055"/>    <section>
+    <title>layer_names()</title>
+<indexterm><primary>layer_names</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>layer_names</secondary></indexterm>
+<para><computeroutput> Tuple[str] yoyo66.datastruct.phmImage.layer_names ( self)</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1adc88efce900a672ad803f37c87e03bae"/>    <section>
+    <title>load_layer()</title>
+<indexterm><primary>load_layer</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>load_layer</secondary></indexterm>
+<para><computeroutput> <link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link> yoyo66.datastruct.phmImage.load_layer ( self, str layer_name)</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1a19caabb1963b9b843e0236dff53ceedf"/>    <section>
+    <title>load_layer_by_index()</title>
+<indexterm><primary>load_layer_by_index</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>load_layer_by_index</secondary></indexterm>
+<para><computeroutput> <link linkend="_classyoyo66_1_1datastruct_1_1phmLayer">phmLayer</link> yoyo66.datastruct.phmImage.load_layer_by_index ( self, int index)</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1a4e2212f70a5b75417a5182d7999bf5e4"/>    <section>
+    <title>original_image()</title>
+<indexterm><primary>original_image</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>original_image</secondary></indexterm>
+<para><computeroutput> Image yoyo66.datastruct.phmImage.original_image ( self)</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1a19b5b975ccd9c23b81323ee875774ecf"/>    <section>
+    <title>set_property()</title>
+<indexterm><primary>set_property</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>set_property</secondary></indexterm>
+<para><computeroutput>def yoyo66.datastruct.phmImage.set_property ( self,  prop,  value)</computeroutput></para></section>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1aa49867ffb9d2bf52248cab2e65614aed"/>    <section>
+    <title>dimension</title>
+<indexterm><primary>dimension</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>dimension</secondary></indexterm>
+<para><computeroutput>yoyo66.datastruct.phmImage.dimension</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1a8415f3c64c432470db87192304191f07"/>    <section>
+    <title>filename</title>
+<indexterm><primary>filename</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>filename</secondary></indexterm>
+<para><computeroutput>yoyo66.datastruct.phmImage.filename</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1aea98afd2d6832b48a3623e16ba4cce70"/>    <section>
+    <title>filepath</title>
+<indexterm><primary>filepath</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>filepath</secondary></indexterm>
+<para><computeroutput>yoyo66.datastruct.phmImage.filepath</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1a0b98016c67a93d458fda7375119e9ff8"/>    <section>
+    <title>properties</title>
+<indexterm><primary>properties</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>properties</secondary></indexterm>
+<para><computeroutput>yoyo66.datastruct.phmImage.properties</computeroutput></para>    </section><anchor xml:id="_classyoyo66_1_1datastruct_1_1phmImage_1a16ee3dd77eea1eb741fc731af680f571"/>    <section>
+    <title>title</title>
+<indexterm><primary>title</primary><secondary>yoyo66.datastruct.phmImage</secondary></indexterm>
+<indexterm><primary>yoyo66.datastruct.phmImage</primary><secondary>title</secondary></indexterm>
+<para><computeroutput>yoyo66.datastruct.phmImage.title</computeroutput></para></section>
+<para>
+The documentation for this class was generated from the following file:</para>
+yoyo66/<link linkend="_datastruct_8py">datastruct.py</link></section>
+</section>

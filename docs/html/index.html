@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>YoYo-SLA : Segmentation Labeling Assistant: Main Page</title>
+<title>YoYo-SLA : Segmentation Labeling Assistant: YoYo-SLA : Segmentation Labeling Assistant</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,11 +61,35 @@ $(function() {
 </iframe>
 </div>
 
-<div class="header">
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">YoYo-SLA : Segmentation Labeling Assistant Documentation</div>  </div>
+<div class="title">YoYo-SLA : Segmentation Labeling Assistant </div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><p>YoYo-SLA is a python module providing required functionalities to view/edit/modify labeled data using photo editing softwares like GIMP. The library supports various file formats such as xcf (gimp) and ora (OpenRaster).</p>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Features</h1>
+<ul>
+<li>A customized version of OpenRaster file (*.orax).</li>
+<li>A File loader for multi-layer imagery files (the loader load the file to a in-memory structure containing the layers, original image, metadata, and other properties)</li>
+<li>Extension of the file loader for XCF files (*.xcf)</li>
+<li>Extension of the file loader for ORA files (*.ora)</li>
+<li>Extension of the file loader for ORAX files (*.orax)</li>
+<li>Extension of the file loader for RLE files.</li>
+<li>A File writer for multi-layer imagery files (updating the file structure based on the modifications made)</li>
+<li>The in-memory structure should have lazy loading of the layers.</li>
+<li>The in-memory structure should provide access to the metadata using [string index].</li>
+<li>A Sequential loader for processing files inside a folder.</li>
+<li>Convert from a multi-layer format to another multi-layer format.</li>
+<li>A tool for opening the ORAX files in gimp (including the gimp plugin, linux file handler, and script to install the file handler).</li>
+<li>A tool for converting all files in a folder from a file format to another file format.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md3"></a>
+Contributors</h1>
+<ul>
+<li>Parham Nooralishahi (Developer) </li>
+</ul>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

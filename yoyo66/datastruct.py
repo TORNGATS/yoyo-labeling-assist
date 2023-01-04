@@ -1,28 +1,55 @@
 
 """!
+@package datastruct
 @file datastruct.py
-@brief The in-memory data structure definition and all related utils.
 @author Parham Nooralishahi
+@brief The in-memory data structure definition and all related utils.
+@image html resources/logo.png
+@image latex resources/logo.png
 """
 
 # Imports
 import os
 import numbers
+import functools
 
+from PIL import Image
+from dataclasses import dataclass, field
 from pathlib import Path
 from collections import namedtuple
+from abc import ABC, abstractmethod
+from typing import Union, Dict, Tuple, List
 
+"""!
+@{
+@name Dimension
+@brief Dimension is a entity class used to keep the dimension al values (width and height)
+Dimension class has two main fields: width and height. 
+"""
 Dimension = namedtuple('Dimension', ['width', 'height'])
+"""!
+@}
+"""
 
-class phmImage:
+@dataclass
+class phmLayer:
     """!
-    @class phmImage
-    @brief The definition of in-memory data structure is determined here. The fields presenting the layers, original data, and metadata associated to the image.
-    """
+    @brief phmLayer is a base class for layers inside a multi-layer image file.
+    """ 
+    
+    """! the name of the layer """
+    name : str
+    opacity : float = field(default=1.0)
+    visibility : bool = field(default=True)
+    image : Image = field(default=None)
+    x : int = field(default=0)
+    y : int = field(default=0)
+
+class phmImage(ABC):
+    
     def __init__(self,
         filepath : str,
-        title : str = None
-    ):
+        title : str = None):
         # File path
         self.filepath = filepath
         # File name
@@ -31,19 +58,75 @@ class phmImage:
         self.title = Path(self.filepath).stem if title is None else title
         # Image dimensions
         self.dimension = None
-        # Image layers
-        self.layers = {}
-        # Image metadata
-        self.metadata = {
+        # Properties
+        self.properties = {
             'filepath' : self.filepath,
             'filename' : self.filename,
             'title' : self.title,
         }
+
+    def __getitem__(self, key) -> Union[Dict, phmLayer] :
+        res = None
+        if key == 'properties':
+            res = self.properties
+        elif isinstance(key, str):
+            res = self.load_layer(key)
+        elif isinstance(key, numbers.Number):
+            res = self.load_layer_by_index(key)
+        return res
+   
+    def get_property(self, prop):
+        if prop in self.properties:
+            raise KeyError('Property %s not found' % prop)
+        return self.properties[prop]
+    
+    def set_property(self, prop, value):
+        self.properties[prop] = value
+    
+    @abstractmethod
+    def load_layer(self, layer_name : str) -> phmLayer:
+        pass
+    
+    @abstractmethod
+    def load_layer_by_index(self, index : int) -> phmLayer:
+        pass
+    
+    @abstractmethod
+    def get_all_layers(self) -> Tuple[phmLayer]:
+        pass
+
+    @abstractmethod
+    def get_layer_names(self) -> Tuple[str]:
+        pass
+    
+    @abstractmethod
+    def get_original_image(self):
+        pass
+    
+    @property
+    def layer_names(self) -> Tuple[str]:
+        return self.get_layer_names()
+    
+    @property
+    def original_image(self) -> Image:
+        return self.get_original_image()
+
+class InMemoryImage(phmImage):
+    """!
+    @brief The definition of in-memory data structure is determined here. The fields presenting the layers, original data, and metadata associated to the image.
+    """
+    def __init__(self,
+        filepath : str,
+        title : str = None,
+        layers : List[phmLayer] = []
+    ):
+        super(phmImage, self).__init__(filepath, title)
+        self.layers = layers
     
     def __getitem__(self, key):
         res = None
-        if key == 'metadata':
-            res = self.metadata[key]
+        if key == 'properties':
+            res = self.properties[key]
         elif isinstance(key, str):
             res = self.__getlayer(key)
         elif isinstance(key, numbers.Number):
