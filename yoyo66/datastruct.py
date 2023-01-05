@@ -1,43 +1,29 @@
 
-"""!
-@package datastruct
-@file datastruct.py
-@author Parham Nooralishahi
-@brief The in-memory data structure definition and all related utils.
-@image html resources/logo.png
-@image latex resources/logo.png
-"""
 
-# Imports
-import os
-import numbers
 import functools
-
-from PIL import Image
+import numbers
+import os
+from abc import ABC, abstractmethod
+from collections import namedtuple
 from dataclasses import dataclass, field
 from pathlib import Path
-from collections import namedtuple
-from abc import ABC, abstractmethod
-from typing import Union, Dict, Tuple, List
+from typing import Dict, List, Tuple, Union
 
-"""!
-@{
-@name Dimension
-@brief Dimension is a entity class used to keep the dimension al values (width and height)
-Dimension class has two main fields: width and height. 
+from PIL import Image
+
+"""
+Dimension is a entity class used to keep the dimension al values (width and height)
+Dimension class has two main fields: width and height.
 """
 Dimension = namedtuple('Dimension', ['width', 'height'])
-"""!
-@}
-"""
 
 @dataclass
 class phmLayer:
-    """!
-    @brief phmLayer is a base class for layers inside a multi-layer image file.
-    """ 
+    """
+    phmLayer is a base class for layers inside a multi-layer image file.
+    """
     
-    """! the name of the layer """
+    #: 
     name : str
     opacity : float = field(default=1.0)
     visibility : bool = field(default=True)
