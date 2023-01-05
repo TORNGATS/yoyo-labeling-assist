@@ -1,10 +1,9 @@
 
 """!
-@brief YoYo-SLA : Segmentation Labeling Assistant
+yoyo66 module provides all the functionalities required to view/edit/modify labeled data using 
+photo editing softwares like GIMP. The library supports various file formats such as xcf (gimp) and ora (OpenRaster).
 
-@section description_yoyo_project YoYo-SLA is a python module providing required functionalities to view/edit/modify labeled data using photo editing softwares like GIMP. The library supports various file formats such as xcf (gimp) and ora (OpenRaster).
-
-@author Parham Nooralishahi
+Author Parham Nooralishahi
 
 """
 
