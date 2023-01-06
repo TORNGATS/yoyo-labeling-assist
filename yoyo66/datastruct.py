@@ -3,7 +3,7 @@
 import functools
 import numbers
 import os
-from abc import ABC, abstractmethod
+from abc import ABC
 from collections import namedtuple
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -25,6 +25,8 @@ class phmLayer:
     phmLayer is a base class for layers inside a multi-layer image file.
     """
     
+    # The index of the layer
+    id : int
     # name (str) the name of layer 
     name : str
     # opacity (float) the opacity of the layer. Default 1.0
@@ -50,6 +52,7 @@ class phmImage(ABC):
         layers : List[phmLayer],
         title : str = None
     ):
+        super().__init__()
         # File path
         self.filepath = filepath
         # File name
