@@ -14,11 +14,15 @@ from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY
 class GIMPFileHandler(BaseFileHandler):
 
     __file_formats__ = ['jpg', 'jpeg', 'png', 'tiff', 'bmp']
+    __gimp_extension = 'xcf'
 
     def __init__(self, categories: Union[Dict[str, int], List[str]]) -> None:
         super().__init__(categories)
     
     def load(self, filepath: str) -> phmImage:
+        file_extension = filepath.split('.')[-1].lower()
+        if not file_extension == self.__gimp_extension:
+            raise ValueError('file needs to be a xcf file!')
         # Argument initialization and checking
         if not Path(filepath).is_file():
             raise ValueError(message=f'The file ({filepath}) does not exist!')
