@@ -62,5 +62,5 @@ class GIMPFileHandler(BaseFileHandler):
             layers = layers
         )
 
-    def update(self, img: phmImage, file_path: str):
+    def save(self, img: phmImage, file_path: str):
         raise NotImplementedError('Update feature is not implemented yet!')

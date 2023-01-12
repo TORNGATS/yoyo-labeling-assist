@@ -1,6 +1,7 @@
 
 import numpy as np
 
+from PIL import Image
 from pathlib import Path
 from typing import Dict, List, Union
 from pyora import Project, TYPE_LAYER
@@ -78,5 +79,27 @@ class GIMPFileHandler(BaseFileHandler):
             layers = mask_layers
         )
 
-    def update(self, img: phmImage, file_path: str):
-        pass
+    def save(self, img: phmImage, file_path: str):
+        dim = img.dimension
+        project = Project.new(width = img.width, height = img.height)
+        # Create original layer
+        orig_layer = project.add_layer(Image.fromarray(img.orig_layer.image), self.__ORIG_LAYER_KEY)
+        # Add properties
+        for k, v in img.properties.items():
+            orig_layer.raw_attributes[self.__PROPERTIES_KEY + k] = v
+        # Add Metrics
+        for k, v in img.metrics.items():
+            orig_layer.raw_attributes[self.__METRICS_KEY + k] = v
+        # Add Layers
+        masks = project.add_group(path=self.__LAYERS_KEY)
+        for layer in img.layers:
+            img = Image.fromarray(layer.image.astype(np.uint8), 'L')
+            masks.add_layer(
+                image = img,
+                name = layer.name,
+                offsets = (layer.x, layer.y),
+                opacity = layer.opacity,
+                visible = layer.visibility
+            )
+        
+        project.save(file_path)

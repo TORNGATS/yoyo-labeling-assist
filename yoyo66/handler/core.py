@@ -54,5 +54,5 @@ class BaseFileHandler(ABC):
     def load(self, filepath : str) -> phmImage:
         pass
 
-    def update(self, img : phmImage, file_path : str) -> None:
+    def save(self, img : phmImage, file_path : str) -> None:
         pass
