@@ -9,7 +9,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
-from PIL import Image
 import numpy as np
 
 ORIGINAL_LAYER_KEY = 'original'
@@ -71,9 +70,10 @@ class phmImage:
     def __init__(self,
         filepath : str,
         properties : Dict,
-        orig_image : Image,
+        orig_image : np.ndarray,
         layers : List[Layer],
-        title : str = None
+        title : str = None,
+        metrics : Dict = {}
     ):
         super().__init__()
         # File path
@@ -89,6 +89,8 @@ class phmImage:
             'title' : self.title,
             **properties
         }
+        # Metrics
+        self.metrics = metrics
         # Layers
         self.layers = layers
         # Original Layer
@@ -98,7 +100,15 @@ class phmImage:
             x = 0, y = 0
         )
    
-    def get_property(self, prop):
+    def get_metric(self, key : str):
+        if not key in self.metrics:
+            raise KeyError('Metric %s not found' % prop)
+        return self.metrics[key]
+
+    def set_metric(self, key, value) -> None:
+        self.metrics[key] = value
+
+    def get_property(self, prop : str):
         if not prop in self.properties:
             raise KeyError('Property %s not found' % prop)
         return self.properties[prop]
