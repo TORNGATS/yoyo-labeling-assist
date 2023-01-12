@@ -7,10 +7,10 @@ from typing import Dict, List, Union
 from typing import Any, Callable, Dict, List
 from gimpformats.gimpXcfDocument import GimpDocument
 
-from yoyo66.handler import BaseFileHandler, file_handlers
+from yoyo66.handler import BaseFileHandler, mmfile_handler
 from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY
 
-@file_handlers('gimp')
+@mmfile_handler('gimp')
 class GIMPFileHandler(BaseFileHandler):
 
     __file_formats__ = ['jpg', 'jpeg', 'png', 'tiff', 'bmp']
