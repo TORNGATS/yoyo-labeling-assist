@@ -27,8 +27,7 @@ class GIMPFileHandler(BaseFileHandler):
         #####################
         # Load the GIMP file
         gimp = GimpDocument(filepath)
-        layers = gimp.layers
-        num_layers = len(layers)
+        layers = gimp.textLayerFlags
         # Go through the layers
         orig_img = None
         layers = []
