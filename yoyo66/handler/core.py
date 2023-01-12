@@ -7,10 +7,11 @@ from typing import Dict, List, Union, Tuple
 from yoyo66.datastruct import phmImage
 
 # List of file handlers
-file_handlers = []
+file_handlers = {}
 
-def handler(name):
-    """ the decorator presenting the file handler
+def mmfile_handler(name, file_extensions : List[str]):
+    """ 
+    The decorator presenting the file handler
 
     Args:
         name (str): name of the file handler
@@ -19,7 +20,7 @@ def handler(name):
         global file_handlers
 
         if isinstance(clss, BaseFileHandler):
-            file_handlers[name] = clss
+            file_handlers[name] = (clss, file_extensions)
 
     return __embed_func
 
@@ -54,5 +55,26 @@ class BaseFileHandler(ABC):
     def load(self, filepath : str) -> phmImage:
         pass
 
+    @abstractmethod
     def save(self, img : phmImage, file_path : str) -> None:
         pass
+
+def build_by_name(name : str, categories : Dict[str, int]) -> BaseFileHandler:
+    if name in file_handlers:
+        raise KeyError(f'{name} does not exist in file handlers!')
+
+    return file_handlers[name](categories)
+
+
+def build_by_file_extension(ext : str) -> BaseFileHandler:
+    name = None
+    for nm, fxs in file_handlers.items():
+        for x in fxs:
+            if ext == x:
+                name = nm
+                break
+
+    if name is None: 
+        raise KeyError(f'{ext} does not associated with any file handler')
+
+    return build_by_name(name)
