@@ -7,7 +7,7 @@ from abc import ABC
 from collections import namedtuple
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Tuple, Union, Callable
 
 import numpy as np
 
@@ -128,20 +128,22 @@ class phmImage:
             raise IndexError('Index %d does not exist' % index)
         
         return self.layers[index]
-    
-    def __getitem__(self, key) -> Union[Dict, Layer] :
-        res = None
-        if key == 'properties':
-            res = self.properties
-        elif key == ORIGINAL_LAYER_KEY:
-            res = self.orig_layer
-        elif isinstance(key, str):
-            res = self.get_layer(key)
-        elif isinstance(key, numbers.Number):
-            res = self.get_layer_by_index(key)
-        else:
-            raise ValueError('Key %s is invalid' % key)
-        return res
+
+    def get_classmap(self, fusion_func : Callable[[np.ndarray], np.ndarray]) -> np.ndarray:
+        layers = self.mask_layers
+        ls = [l.classmap for l in layers]
+        ls = np.dstack(ls)
+        return fusion_func(ls)
+
+    def get_dp_ready(self, fusion_func : Callable[[np.ndarray], np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
+        return (
+            self.original_layer.image,
+            self.get_classmap(fusion_func)
+        )
+
+    @property
+    def classmap(self) -> np.ndarray:
+        return self.get_classmap(lambda x : np.amax(x, axis = 2))
 
     @property
     def original_layer(self) -> Layer:
@@ -168,3 +170,17 @@ class phmImage:
     
     def __str__(self) -> str:
         return f'{self.title} (Layers : {self.count_layers}) [Dimension : {self.dimension}]'
+
+    def __getitem__(self, key) -> Union[Dict, Layer] :
+        res = None
+        if key == 'properties':
+            res = self.properties
+        elif key == ORIGINAL_LAYER_KEY:
+            res = self.orig_layer
+        elif isinstance(key, str):
+            res = self.get_layer(key)
+        elif isinstance(key, numbers.Number):
+            res = self.get_layer_by_index(key)
+        else:
+            raise ValueError('Key %s is invalid' % key)
+        return res
