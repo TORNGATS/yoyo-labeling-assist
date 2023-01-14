@@ -56,10 +56,10 @@ class BaseFileHandler(ABC):
         pass
 
     @abstractmethod
-    def save(self, img : phmImage, file_path : str) -> None:
+    def save(self, img : phmImage, filepath : str) -> None:
         pass
 
-def build_by_name(name : str, categories : Dict[str, int]) -> BaseFileHandler:
+def build_by_name(name : str, categories : Dict[str, int] = None) -> BaseFileHandler:
     if name in file_handlers:
         raise KeyError(f'{name} does not exist in file handlers!')
 

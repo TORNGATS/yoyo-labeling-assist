@@ -9,7 +9,7 @@ from pyora import Project, TYPE_LAYER
 from yoyo66.handler import BaseFileHandler, mmfile_handler
 from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY
 
-@mmfile_handler('openraster')
+@mmfile_handler('openraster', ['ora'])
 class OpenRasterFileHandler(BaseFileHandler):
 
     __ora_extension = '.ora'
@@ -79,7 +79,7 @@ class OpenRasterFileHandler(BaseFileHandler):
             layers = mask_layers
         )
 
-    def save(self, img: phmImage, file_path: str):
+    def save(self, img: phmImage, filepath: str):
         dim = img.dimension
         project = Project.new(width = img.width, height = img.height)
         # Create original layer
@@ -102,4 +102,4 @@ class OpenRasterFileHandler(BaseFileHandler):
                 visible = layer.visibility
             )
         
-        project.save(file_path)
+        project.save(filepath)

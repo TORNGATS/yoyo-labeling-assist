@@ -84,8 +84,6 @@ class phmImage:
         self.title = Path(self.filepath).stem if title is None else title
         # Properties
         self.properties = {
-            'filepath' : self.filepath,
-            'filename' : self.filename,
             'title' : self.title,
             **properties
         }

@@ -10,7 +10,7 @@ from gimpformats.gimpXcfDocument import GimpDocument
 from yoyo66.handler import BaseFileHandler, mmfile_handler
 from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY
 
-@mmfile_handler('gimp')
+@mmfile_handler('gimp', ['xcf'])
 class GIMPFileHandler(BaseFileHandler):
 
     __file_formats__ = ['jpg', 'jpeg', 'png', 'tiff', 'bmp']
@@ -62,5 +62,5 @@ class GIMPFileHandler(BaseFileHandler):
             layers = layers
         )
 
-    def save(self, img: phmImage, file_path: str):
+    def save(self, img: phmImage, filepath: str):
         raise NotImplementedError('Update feature is not implemented yet!')
