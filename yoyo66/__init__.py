@@ -7,4 +7,4 @@ Author Parham Nooralishahi
 
 """
 
-from datastruct import *
+from .datastruct import *
