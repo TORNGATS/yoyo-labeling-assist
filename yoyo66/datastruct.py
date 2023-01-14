@@ -55,7 +55,7 @@ class Layer:
         Returns:
             Tuple[int, int]: The size of the layer (width, height)
         """
-        return self.image.size
+        return (self.image.shape[0], self.image.shape[1])
 
     @property
     def classmap(self):
@@ -158,6 +158,14 @@ class phmImage:
     @property
     def dimension(self):
         return self.orig_layer.dimension
+
+    @property
+    def width(self):
+        return self.dimension[0]
+
+    @property
+    def height(self):
+        return self.dimension[1]
 
     @property
     def count_layers(self):

@@ -45,7 +45,7 @@ class OpenRasterFileHandler(BaseFileHandler):
                 props[pkey] = it[1]
             elif it[0].startswith(self.__METRICS_KEY):
                 pkey = it[0].replace(self.__METRICS_KEY, '')
-                metrics[pkey] = it[1]
+                metrics[pkey] = float(it[1])
 
         # Mask Layers
         mask_layers = []
@@ -89,11 +89,11 @@ class OpenRasterFileHandler(BaseFileHandler):
             orig_layer.raw_attributes[self.__PROPERTIES_KEY + k] = v
         # Add Metrics
         for k, v in img.metrics.items():
-            orig_layer.raw_attributes[self.__METRICS_KEY + k] = v
+            orig_layer.raw_attributes[self.__METRICS_KEY + k] = str(v)
         # Add Layers
         masks = project.add_group(path=self.__LAYERS_KEY)
         for layer in img.layers:
-            img = Image.fromarray(layer.image.astype(np.uint8), 'L')
+            img = Image.fromarray(layer.image, 'LA')
             masks.add_layer(
                 image = img,
                 name = layer.name,

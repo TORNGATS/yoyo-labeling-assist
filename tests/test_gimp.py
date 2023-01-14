@@ -21,8 +21,12 @@ class GIMP_Test(unittest.TestCase):
         gimp = build_by_name('gimp', ['Crack', 'SurfDeg'])
         img = gimp.load(file)
         print(img)
+    
+    def test_load_with_category(self):
+        file = "tests/resources/gimp_1.xcf"
+        gimp = build_by_name('gimp', {'Crack' : 100, 'SurfDeg' : 200})
+        img = gimp.load(file)
+        print(img)
 
 if __name__ == '__main__':
     unittest.main()
-
-        
