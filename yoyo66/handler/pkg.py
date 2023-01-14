@@ -38,14 +38,14 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
             with pkg.open(self.__METRICS_FILE) as f:
                 metrics = json.loads(f.read())
             # original image
-            orig_file = zipfile.open(metainfo['original']['file'])
-            orig_img = Image.open(orig_file)
+            orig_file = pkg.open(metainfo['original']['file'])
+            orig_img = np.asarray(Image.open(orig_file))
             metainfo.pop('original')
             # layers
             for lname, info in metainfo.items():
                 lfn = metainfo[lname]['file']
-                lfile = zipfile.open(f'layers/{lfn}')
-                limg = Image.open(lfile, 'L')
+                lfile = pkg.open(f'layers/{lfn}')
+                limg = Image.open(lfile).convert('LA')
                 layer = Layer(
                     name = lname,
                     opacity = metainfo[lname]['opacity'],
@@ -80,9 +80,9 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
                 'visibility' : img.orig_layer.visibility
             }
             orig_io = io.BytesIO()
-            Image.fromarray(img.orig_layer.image).save(orig_io)
-            orig_io.close()
+            Image.fromarray(img.orig_layer.image).save(orig_io, format='png')
             pkg.writestr(f'{img.title}.png', orig_io.getvalue())
+            orig_io.close()
             # Save Layers
             for layer in img.layers:
                 img_list[layer.name] = {
@@ -91,8 +91,8 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
                     'visibility' : layer.visibility
                 }
                 layer_io = io.BytesIO()
-                Image.fromarray(layer.image).save(layer_io, 'L')
+                Image.fromarray(layer.image).save(layer_io, format='png')
+                pkg.writestr(f'layers/{layer.name}.png', layer_io.getvalue(), zipfile.ZIP_DEFLATED)
                 layer_io.close()
-                pkg.writestr(f'layers/{layer.name}.png', orig_io.getvalue(), zipfile.ZIP_DEFLATED)
             # Save metadata
             pkg.writestr(self.__METAINFO_FILE, json.dumps(img_list))

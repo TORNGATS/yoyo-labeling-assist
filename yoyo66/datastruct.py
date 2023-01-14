@@ -48,6 +48,9 @@ class Layer:
         """
         return self.image is not None
 
+    def classmap(self):
+        return self.image * self.class_id
+
     @property
     def dimension(self) -> Tuple[int, int]:
         """ Dimension of the layer
@@ -56,10 +59,6 @@ class Layer:
             Tuple[int, int]: The size of the layer (width, height)
         """
         return (self.image.shape[0], self.image.shape[1])
-
-    @property
-    def classmap(self):
-        return self.image * self.class_id
 
 
 class phmImage:
@@ -129,7 +128,7 @@ class phmImage:
 
     def get_classmap(self, fusion_func : Callable[[np.ndarray], np.ndarray]) -> np.ndarray:
         layers = self.mask_layers
-        ls = [l.classmap for l in layers]
+        ls = [l.classmap() for l in layers]
         ls = np.dstack(ls)
         return fusion_func(ls)
 
@@ -139,7 +138,6 @@ class phmImage:
             self.get_classmap(fusion_func)
         )
 
-    @property
     def classmap(self) -> np.ndarray:
         return self.get_classmap(lambda x : np.amax(x, axis = 2))
 
