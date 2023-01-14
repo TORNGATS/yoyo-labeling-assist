@@ -16,13 +16,12 @@ def mmfile_handler(name, file_extensions : List[str]):
     Args:
         name (str): name of the file handler
     """
-    def __embed_func(clss):
+    def __embed_clss(clss):
         global file_handlers
-
-        if isinstance(clss, BaseFileHandler):
+        if issubclass(clss, BaseFileHandler):
             file_handlers[name] = (clss, file_extensions)
 
-    return __embed_func
+    return __embed_clss
 
 def list_file_handlers() -> Tuple:
     """ List of file handlers registered using the defined decorator!
@@ -59,11 +58,11 @@ class BaseFileHandler(ABC):
     def save(self, img : phmImage, filepath : str) -> None:
         pass
 
-def build_by_name(name : str, categories : Dict[str, int] = None) -> BaseFileHandler:
-    if name in file_handlers:
+def build_by_name(name : str, categories : Union[Dict[str, int], List[str]]) -> BaseFileHandler:
+    if not name in file_handlers:
         raise KeyError(f'{name} does not exist in file handlers!')
 
-    return file_handlers[name](categories)
+    return file_handlers[name][0](categories)
 
 
 def build_by_file_extension(ext : str) -> BaseFileHandler:

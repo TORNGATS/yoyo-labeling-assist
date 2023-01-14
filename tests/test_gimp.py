@@ -17,8 +17,8 @@ from yoyo66.handler.core import build_by_name
 class GIMP_Test(unittest.TestCase):
     
     def test_load_without_category(self):
-        file = "tests/resources/gimp_1.ora"
-        gimp = build_by_name('gimp')
+        file = "tests/resources/gimp_1.xcf"
+        gimp = build_by_name('gimp', ['Crack', 'SurfDeg'])
         img = gimp.load(file)
         print(img)
 

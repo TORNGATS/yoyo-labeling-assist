@@ -32,7 +32,7 @@ class GIMPFileHandler(BaseFileHandler):
         # Go through the layers
         orig_img = None
         layers = []
-        for layer in layers:
+        for layer in gimp.layers:
             # Check if the layer is a group layers
             if not layer.isGroup:
                 layer_name = layer.name
