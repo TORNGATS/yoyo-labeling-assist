@@ -99,7 +99,7 @@ class phmImage:
    
     def get_metric(self, key : str):
         if not key in self.metrics:
-            raise KeyError('Metric %s not found' % prop)
+            raise KeyError('Metric %s not found' % key)
         return self.metrics[key]
 
     def set_metric(self, key, value) -> None:
