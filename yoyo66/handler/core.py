@@ -1,8 +1,10 @@
 
+import os.path
 import random
+import pathlib
 
 from abc import ABC, abstractmethod
-from typing import Dict, List, Union, Tuple
+from typing import Dict, List, Union, Tuple, Any
 
 from yoyo66.datastruct import phmImage
 
@@ -19,7 +21,8 @@ def mmfile_handler(name, file_extensions : List[str]):
     def __embed_clss(clss):
         global file_handlers
         if issubclass(clss, BaseFileHandler):
-            file_handlers[name] = (clss, file_extensions)
+            # Add the file extension field to the handler class
+            file_handlers[name] = (clss, file_extensions) 
 
     return __embed_clss
 
@@ -41,6 +44,9 @@ class BaseFileHandler(ABC):
     ) -> None:
         super().__init__()
 
+        # File extensions filled by the creator method
+        self.file_extensions = []
+        # The field contains the determined categories and associated class id
         self.categories = {}
         # Check if it is a list, convert it to a dictionary
         if isinstance(categories, List):
@@ -50,6 +56,21 @@ class BaseFileHandler(ABC):
         else:
             self.categories = categories
 
+    def is_valid(self, filepath : str) -> bool:
+        fext = pathlib.Path(filepath).suffix.replace('.', '')
+        return os.path.exists(filepath) and fext in self.file_extensions
+
+    def __call__(self, filepath : str, img : phmImage = None) -> Any:
+        if self.is_valid(filepath):
+            raise ValueError("File extension is not supported by the selected file handler!")
+
+        if img is None:
+            # if the img field is None, it means the method uses the given path to load the multi-level imagery file.
+            return self.load(filepath)
+        else:
+            # if the img field is given, it means the call method uses the given path to save the multi-level imagery file.
+            self.save(img, filepath)
+        
     @abstractmethod
     def load(self, filepath : str) -> phmImage:
         pass
@@ -62,8 +83,11 @@ def build_by_name(name : str, categories : Union[Dict[str, int], List[str]]) -> 
     if not name in file_handlers:
         raise KeyError(f'{name} does not exist in file handlers!')
 
-    return file_handlers[name][0](categories)
-
+    # Instantiate the handler based on the given name
+    handler = file_handlers[name][0](categories)
+    # Initialize the file extensions associated with the handler!
+    handler.file_extensions = file_handlers[name][1]
+    return handler
 
 def build_by_file_extension(ext : str) -> BaseFileHandler:
     name = None
