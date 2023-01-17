@@ -10,6 +10,7 @@ from yoyo66.datastruct import phmImage
 
 # List of file handlers
 file_handlers = {}
+__supported_file_extensions = []
 
 def mmfile_handler(name, file_extensions : List[str]):
     """ 
@@ -20,7 +21,15 @@ def mmfile_handler(name, file_extensions : List[str]):
     """
     def __embed_clss(clss):
         global file_handlers
+        global __supported_file_extensions
         if issubclass(clss, BaseFileHandler):
+            sts = False
+            # Check if the file extension is already covered by another file handler
+            for ex in file_extensions:
+                if ex in __supported_file_extensions:
+                    sts = True
+            if sts:
+                raise TypeError(f'file extensions associated to {name} are already covered by other file handlers')
             # Add the file extension field to the handler class
             file_handlers[name] = (clss, file_extensions) 
 
@@ -58,10 +67,10 @@ class BaseFileHandler(ABC):
 
     def is_valid(self, filepath : str) -> bool:
         fext = pathlib.Path(filepath).suffix.replace('.', '')
-        return os.path.exists(filepath) and fext in self.file_extensions
+        return fext in self.file_extensions
 
     def __call__(self, filepath : str, img : phmImage = None) -> Any:
-        if self.is_valid(filepath):
+        if not self.is_valid(filepath):
             raise ValueError("File extension is not supported by the selected file handler!")
 
         if img is None:
@@ -89,15 +98,14 @@ def build_by_name(name : str, categories : Union[Dict[str, int], List[str]]) -> 
     handler.file_extensions = file_handlers[name][1]
     return handler
 
-def build_by_file_extension(ext : str) -> BaseFileHandler:
+def build_by_file_extension(ext : str, categories : Union[Dict[str, int], List[str]]) -> BaseFileHandler:
     name = None
     for nm, fxs in file_handlers.items():
-        for x in fxs:
-            if ext == x:
-                name = nm
-                break
+        if ext in fxs[-1]:
+            name = nm
+            break
 
     if name is None: 
         raise KeyError(f'{ext} does not associated with any file handler')
 
-    return build_by_name(name)
+    return build_by_name(name, categories)

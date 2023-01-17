@@ -93,7 +93,7 @@ class OpenRasterFileHandler(BaseFileHandler):
         # Add Layers
         masks = project.add_group(path=self.__LAYERS_KEY)
         for layer in img.layers:
-            img = Image.fromarray(layer.image, 'LA')
+            img = Image.fromarray(layer.image).convert('LA')
             masks.add_layer(
                 image = img,
                 name = layer.name,

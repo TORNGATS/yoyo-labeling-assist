@@ -43,16 +43,22 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
             metainfo.pop('original')
             # layers
             for lname, info in metainfo.items():
+                if not lname in self.categories:
+                    continue
+                class_id = self.categories[lname]
                 lfn = metainfo[lname]['file']
                 lfile = pkg.open(f'layers/{lfn}')
                 limg = Image.open(lfile).convert('LA')
-                layer = Layer(
+                channels = limg.split()
+                img_ch = channels[-1].convert('1')
+                limg = np.where(np.asarray(img_ch) != 0, 1, 0).astype(np.int8)
+                layers.append(Layer(
                     name = lname,
                     opacity = metainfo[lname]['opacity'],
                     visibility = metainfo[lname]['visibility'],
-                    image = np.asarray(limg)
-                )
-                layers.append(layer)
+                    image = np.asarray(limg),
+                    class_id = class_id
+                ))
 
         return phmImage(
             filepath = filepath,
@@ -91,7 +97,7 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
                     'visibility' : layer.visibility
                 }
                 layer_io = io.BytesIO()
-                Image.fromarray(layer.image).save(layer_io, format='png')
+                Image.fromarray(layer.image).convert('LA').save(layer_io, format='png')
                 pkg.writestr(f'layers/{layer.name}.png', layer_io.getvalue(), zipfile.ZIP_DEFLATED)
                 layer_io.close()
             # Save metadata
