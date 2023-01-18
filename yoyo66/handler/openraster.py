@@ -7,7 +7,7 @@ from typing import Dict, List, Union
 from pyora import Project, TYPE_LAYER
 
 from yoyo66.handler import BaseFileHandler, mmfile_handler
-from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY
+from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY, create_image, from_image
 
 @mmfile_handler('openraster', ['ora'])
 class OpenRasterFileHandler(BaseFileHandler):
@@ -56,17 +56,15 @@ class OpenRasterFileHandler(BaseFileHandler):
                 img = layer.image
                 if img.mode in ("RGBA", "LA") or \
                     (img.mode == "P" and "transparency" in img.info):
-                    channels = img.split()
-                    img_ch = channels[-1].convert('1')
+                    limg = from_image(img)
                     if not layer_name in self.categories:
                         continue
                     class_id = self.categories[layer_name]
-                    limg = np.where(np.asarray(img_ch) != 0, 1, 0).astype(np.int8)
                     mask_layers.append(Layer(
                         name = layer['name'],
                         opacity = layer['opacity'],
                         visibility = layer['visibility'],
-                        image = np.asarray(limg),
+                        image = limg,
                         class_id = class_id,
                         x = layer.offsets[0], y = layer.offsets[1]
                     ))
@@ -80,7 +78,6 @@ class OpenRasterFileHandler(BaseFileHandler):
         )
 
     def save(self, img: phmImage, filepath: str):
-        dim = img.dimension
         project = Project.new(width = img.width, height = img.height)
         # Create original layer
         orig_layer = project.add_layer(Image.fromarray(img.orig_layer.image), self.__ORIG_LAYER_KEY)
@@ -93,8 +90,7 @@ class OpenRasterFileHandler(BaseFileHandler):
         # Add Layers
         masks = project.add_group(path=self.__LAYERS_KEY)
         for layer in img.layers:
-            img = Image.fromarray(
-                np.dstack((layer.classmap(), layer.image)), 'LA')
+            img = create_image(layer)
             masks.add_layer(
                 image = img,
                 name = layer.name,

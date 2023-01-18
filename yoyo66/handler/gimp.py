@@ -8,7 +8,7 @@ from typing import Any, Callable, Dict, List
 from gimpformats.gimpXcfDocument import GimpDocument
 
 from yoyo66.handler import BaseFileHandler, mmfile_handler
-from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY
+from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY, from_image
 
 @mmfile_handler('gimp', ['xcf'])
 class GIMPFileHandler(BaseFileHandler):
@@ -44,17 +44,14 @@ class GIMPFileHandler(BaseFileHandler):
                     img = layer.image
                     if img.mode in ("RGBA", "LA") or \
                         (img.mode == "P" and "transparency" in img.info):
-                        channels = img.split()
-                        img_ch = channels[-1].convert('1')
+                        class_id = self.categories[layer_name]
+                        limg = from_image(img)
                         if not layer_name in self.categories:
                             continue
-                        class_id = self.categories[layer_name]
-                        limg = np.where(np.asarray(img_ch) != 0, 1, 0).astype(np.int8)
                         layers.append(Layer(
                             name = layer_name,
                             class_id = class_id,
-                            image = limg
-                        ))
+                            image = limg))
         return phmImage(
             filepath = filepath,
             properties = {},

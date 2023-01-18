@@ -4,6 +4,7 @@ import functools
 import numbers
 import os
 from abc import ABC
+from PIL import Image
 from collections import namedtuple
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -50,7 +51,7 @@ class Layer:
 
     def classmap(self):
         return self.image * self.class_id
-
+    
     @property
     def dimension(self) -> Tuple[int, int]:
         """ Dimension of the layer
@@ -60,6 +61,20 @@ class Layer:
         """
         return (self.image.shape[0], self.image.shape[1])
 
+def from_image(img : Image) -> np.ndarray:
+    channels = img.split()
+    # Extract transparency channel
+    img_ch = channels[-1].convert('1')
+    return np.where(np.asarray(img_ch) != 0, 1, 0).astype(np.int8)
+
+def create_image(layer : Layer) -> Image:
+    img = Image.fromarray(layer.classmap(), mode = 'L')
+
+    alpha = np.where(layer.image != 0, 255, 0).astype(np.int8)
+    alpha = Image.fromarray(alpha, mode = 'L')
+    # alpha = Image.new('L', img.size, 255)
+    img.putalpha(alpha)
+    return img
 
 class phmImage:
     """ 
@@ -141,6 +156,12 @@ class phmImage:
     def classmap(self) -> np.ndarray:
         return self.get_classmap(lambda x : np.amax(x, axis = 2))
 
+    def create_image(self):
+        img = Image.fromarray(self.classmap())
+        alpha = Image.new('L', img.size, 255)
+        img.putalpha(alpha)
+        return img
+
     @property
     def original_layer(self) -> Layer:
         return self.orig_layer
@@ -159,11 +180,11 @@ class phmImage:
 
     @property
     def width(self):
-        return self.dimension[0]
+        return self.dimension[1]
 
     @property
     def height(self):
-        return self.dimension[1]
+        return self.dimension[0]
 
     @property
     def count_layers(self):

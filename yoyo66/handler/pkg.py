@@ -9,7 +9,7 @@ from typing import Dict, List, Union
 from pyora import Project, TYPE_LAYER
 
 from yoyo66.handler import BaseFileHandler, mmfile_handler
-from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY
+from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY, create_image, from_image
 
 @mmfile_handler('pkg', ['pkg'])
 class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
@@ -48,17 +48,13 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
                 class_id = self.categories[lname]
                 lfn = metainfo[lname]['file']
                 lfile = pkg.open(f'layers/{lfn}')
-                limg = Image.open(lfile).convert('LA')
-                channels = limg.split()
-                img_ch = channels[-1].convert('1')
-                limg = np.where(np.asarray(img_ch) != 0, 1, 0).astype(np.int8)
+                img = from_image(Image.open(lfile))
                 layers.append(Layer(
                     name = lname,
                     opacity = metainfo[lname]['opacity'],
                     visibility = metainfo[lname]['visibility'],
-                    image = np.asarray(limg),
-                    class_id = class_id
-                ))
+                    image = img,
+                    class_id = class_id))
 
         return phmImage(
             filepath = filepath,
@@ -97,7 +93,7 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
                     'visibility' : layer.visibility
                 }
                 layer_io = io.BytesIO()
-                Image.fromarray(layer.image).convert('LA').save(layer_io, format='png')
+                create_image(layer).save(layer_io, format='png')
                 pkg.writestr(f'layers/{layer.name}.png', layer_io.getvalue(), zipfile.ZIP_DEFLATED)
                 layer_io.close()
             # Save metadata
