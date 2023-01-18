@@ -8,7 +8,7 @@ from PIL import Image
 from collections import namedtuple
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Tuple, Union, Callable
+from typing import Dict, List, Tuple, Union, Callable, Any
 
 import numpy as np
 
@@ -75,6 +75,23 @@ def create_image(layer : Layer) -> Image:
     # alpha = Image.new('L', img.size, 255)
     img.putalpha(alpha)
     return img
+
+def default_create_blendimage_func(orig : np.ndarray, layers : List[np.ndarray]) -> Image:
+    # Create the blended layers
+    merged = np.dstack(layers)
+    # The layers are blended together and their priority is based on their class ids, 
+    # So bigger class ids will be preferred pixel by pixel.
+    # It is assumed that the layers have one color channel
+    blayer = np.max(merged, axis = 2)
+    alpha = np.where(blayer != 0, 255, 0).astype(np.int8)
+    
+    blayer = Image.fromarray(blayer, mode = 'L')
+    alpha = Image.fromarray(alpha, mode = 'L')
+    blayer.putalpha(alpha)
+
+    lorig = Image.fromarray(orig).convert('RGBA')
+    lorig.putalpha(255)
+    return Image.alpha_composite(lorig, blayer.convert('RGBA'))
 
 class phmImage:
     """ 
@@ -156,10 +173,16 @@ class phmImage:
     def classmap(self) -> np.ndarray:
         return self.get_classmap(lambda x : np.amax(x, axis = 2))
 
-    def create_image(self):
-        img = Image.fromarray(self.classmap())
-        alpha = Image.new('L', img.size, 255)
-        img.putalpha(alpha)
+    def blended_image(self, 
+        blending_func : Callable[[np.ndarray, List[np.ndarray]], Any] = default_create_blendimage_func
+    ) -> Image:
+        orig = self.original_layer.image
+        layers = list(map(lambda x : x.classmap(), self.layers))
+        return blending_func(orig, layers)
+    
+    def thumbnail(self) -> Image:
+        img = self.blended_image()
+        img.thumbnail((200,150))
         return img
 
     @property
