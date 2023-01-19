@@ -39,8 +39,6 @@ def get_file_extensions(handler : str) -> str:
     global file_handlers
     if not handler in file_handlers:
         raise KeyError(f'{handler} does not supported!')
-    
-        
 
 def list_file_handlers() -> Tuple:
     """ List of file handlers registered using the defined decorator!
