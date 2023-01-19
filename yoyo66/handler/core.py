@@ -35,6 +35,13 @@ def mmfile_handler(name, file_extensions : List[str]):
 
     return __embed_clss
 
+def get_file_extensions(handler : str) -> str:
+    global file_handlers
+    if not handler in file_handlers:
+        raise KeyError(f'{handler} does not supported!')
+    
+        
+
 def list_file_handlers() -> Tuple:
     """ List of file handlers registered using the defined decorator!
 
@@ -42,6 +49,9 @@ def list_file_handlers() -> Tuple:
         Tuple: List of file handler
     """
     return file_handlers
+
+def list_handler_names() -> Tuple:
+    return tuple(file_handlers.keys())
 
 class BaseFileHandler(ABC):
     """
