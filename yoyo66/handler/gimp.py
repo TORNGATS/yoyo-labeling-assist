@@ -44,6 +44,9 @@ class GIMPFileHandler(BaseFileHandler):
                     img = layer.image
                     if img.mode in ("RGBA", "LA") or \
                         (img.mode == "P" and "transparency" in img.info):
+                        if not layer_name in self.categories:
+                            continue
+                        
                         class_id = self.categories[layer_name]
                         limg = from_image(img)
                         if not layer_name in self.categories:

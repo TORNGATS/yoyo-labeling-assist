@@ -180,9 +180,9 @@ class phmImage:
         layers = list(map(lambda x : x.classmap(), self.layers))
         return blending_func(orig, layers)
     
-    def thumbnail(self) -> Image:
+    def thumbnail(self, size : Tuple[int,int] = (400,350)) -> Image:
         img = self.blended_image()
-        img.thumbnail((200,150))
+        img.thumbnail(size)
         return img
 
     @property

@@ -85,6 +85,12 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
             Image.fromarray(img.orig_layer.image).save(orig_io, format='png')
             pkg.writestr(f'{img.title}.png', orig_io.getvalue())
             orig_io.close()
+            # Save thumbnail
+            thumbnail = img.thumbnail()
+            orig_io = io.BytesIO()
+            thumbnail.save(orig_io, format='png')
+            pkg.writestr('thumbnail.png', orig_io.getvalue())
+            orig_io.close()
             # Save Layers
             for layer in img.layers:
                 img_list[layer.name] = {
