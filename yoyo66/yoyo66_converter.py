@@ -26,7 +26,7 @@ def main__():
     parser.add_argument('-i', '--input', type = str, nargs = 1, help = 'Filepath to the input file/directory. in case of directory mode, the input is a filter string like /home/phm/d*.xcf.')
     parser.add_argument('-o', '--output', default = os.getcwd(), type = str, nargs = 1, help = 'Filepath to the output file/directory.')
     parser.add_argument('-m', '--mode', default = 'file', choices = ['file', 'directory'], help = 'Determine the mode of given file/directory.')
-    parser.add_argument('-t', '--type', nargs = '?', choices = list_handler_names(), help = 'Determine the targeted file type. The file type is only used when the mode is set to directory')
+    parser.add_argument('-t', '--type', nargs = '?', choices = list_handler_names(), help = 'Determine the targeted file type. The file type is only used when the output is a directory')
     parser.add_argument('-c', '--categories', default = 'category.json', type = str, help = 'Specify the file (*.json) containing the categories and its associated class ids.')
     
     args = parser.parse_args()
@@ -50,16 +50,18 @@ def main__():
     
     create_out_filepath = lambda fin, fout, type : os.path.join(fout, f'{Path(os.path.basename(fin)).stem}.{get_file_extensions(type)[0]}')
     
+    infile = args.input
     outfile = args.output
     if args.mode == 'file':
-        outfile = outfile if not os.path.isdir(outfile) else create_out_filepath(args.input, outfile, args.type) 
-        convert_file__(args.input, outfile, categories)
+        outfile = outfile if not os.path.isdir(outfile) else create_out_filepath(infile, outfile, args.type) 
+        convert_file__(infile, outfile, categories)
     elif args.mode == 'directory':
-        if not os.path.isdir(args.output):
+        if not os.path.isdir(outfile):
             print("output field must be a directory path")
-        for fin in glob.glob(args.input):
-            outfile = 
-        
+
+        for fin in glob.glob(infile):
+            outfile = create_out_filepath(fin, outfile, args.type)
+            convert_file__(fin, outfile, categories)
 
 if __name__ == "__main__":
     main__()
