@@ -22,6 +22,7 @@ state "File Handler" as handler {
     state "GIMP (*.xcf)"
     state "OpenRaster (*.ora)"
     state "TORNGATS (*.pkg)"
+    state "Multi-page Tiff (*.tif)"
 
     state load <<entryPoint>>
     state save <<entryPoint>>

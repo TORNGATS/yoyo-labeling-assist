@@ -23,7 +23,7 @@ Dimension = namedtuple('Dimension', ['width', 'height'])
 @dataclass
 class Layer:
     """
-    Layer is a base class for mask layers inside a multi-layer image file.
+    Layer is the class for mask layers inside a multi-layer image file.
     """
 
     # name (str) the name of layer 
@@ -49,7 +49,12 @@ class Layer:
         """
         return self.image is not None
 
-    def classmap(self):
+    def classmap(self) -> np.ndarray:
+        """Calculate class map of the layer. The class map uses the mask and the classid to create class map.
+
+        Returns:
+            numpy.ndarray: classmap
+        """
         return self.image * self.class_id
     
     @property
@@ -62,6 +67,15 @@ class Layer:
         return (self.image.shape[0], self.image.shape[1])
 
 def from_image(img : Image) -> np.ndarray:
+    """Convert a ``PIL.Image`` to ``numpy.ndarray`` presenting the layer.
+
+    Args:
+        img (Image): the image
+
+    Returns:
+        np.ndarray: the matrix presenting the image.
+    """
+
     channels = img.split()
     # Extract transparency channel
     img_ch = channels[-1].convert('1')
@@ -70,13 +84,23 @@ def from_image(img : Image) -> np.ndarray:
 def create_image(layer : Layer) -> Image:
     img = Image.fromarray(layer.classmap(), mode = 'L')
 
+    # Add alpha channel to the image.
     alpha = np.where(layer.image != 0, 255, 0).astype(np.int8)
     alpha = Image.fromarray(alpha, mode = 'L')
-    # alpha = Image.new('L', img.size, 255)
     img.putalpha(alpha)
     return img
 
 def default_create_blendimage_func(orig : np.ndarray, layers : List[np.ndarray]) -> Image:
+    """the default function for blending layers
+
+    Args:
+        orig (np.ndarray): the original image
+        layers (List[np.ndarray]): the layers
+
+    Returns:
+        Image: the blended image
+    """
+
     # Create the blended layers
     merged = np.dstack(layers)
     # The layers are blended together and their priority is based on their class ids, 
@@ -95,7 +119,7 @@ def default_create_blendimage_func(orig : np.ndarray, layers : List[np.ndarray])
 
 class phmImage:
     """ 
-    It is the base class for the multi-layer image.
+    It is the class for the multi-layer image.
     """
     
     def __init__(self,
@@ -129,23 +153,70 @@ class phmImage:
             x = 0, y = 0
         )
 
-    def get_metric(self, key : str):
+    def get_metric(self, key : str) -> Any:
+        """Returning the metric stored inside the multi-layer image
+
+        Args:
+            key (str): Metric name
+
+        Raises:
+            KeyError: if metric does not exist
+
+        Returns:
+            Any: Value associated to metric name
+        """
         if not key in self.metrics:
             raise KeyError('Metric %s not found' % key)
         return self.metrics[key]
 
-    def set_metric(self, key, value) -> None:
+    def set_metric(self, key : str, value : Any) -> None:
+        """Setting a metric
+
+        Args:
+            key (str): metric name
+            value (Any): metric value
+        """
         self.metrics[key] = value
 
-    def get_property(self, prop : str):
+    def get_property(self, prop : str) -> Any:
+        """Returning the property stored inside the multi-layer image
+
+        Args:
+            prop (str): property name
+
+        Raises:
+            KeyError: if property does not exist 
+
+        Returns:
+            Any: Value associated to property name
+        """
         if not prop in self.properties:
             raise KeyError('Property %s not found' % prop)
         return self.properties[prop]
     
-    def set_property(self, prop, value) -> None:
+    def set_property(self, prop : str, value) -> None:
+        """Setting a property
+
+        Args:
+            prop (str): property name
+            value (Any): property value
+        """
+
         self.properties[prop] = value
     
     def get_layer(self, layer_name : str) -> Layer:
+        """Getting a layer based on the given name.
+
+        Args:
+            layer_name (str): Layer's name
+
+        Raises:
+            KeyError: if layer name does not exist
+
+        Returns:
+            Layer: The layer associated to the layer's name
+        """
+
         resly = tuple(filter(lambda l : l.name == layer_name, self.layers))
         if len(resly) == 0:
              raise KeyError('%s layer does not exist!' % layer_name)
@@ -153,73 +224,178 @@ class phmImage:
         return resly[0]
     
     def get_layer_by_index(self, index : int) -> Layer:
+        """Getting a layer based on its index
+
+        Args:
+            index (int): Index of the requested layer
+
+        Raises:
+            IndexError: if the index is invalid
+
+        Returns:
+            Layer: The layer associated to the layer's index
+        """
+
         if index >= len(self.layers) or index < 0:
             raise IndexError('Index %d does not exist' % index)
         
         return self.layers[index]
 
     def get_classmap(self, fusion_func : Callable[[np.ndarray], np.ndarray]) -> np.ndarray:
+        """Getting classmap based on the given blending function.
+
+        Args:
+            fusion_func (Callable[[np.ndarray], np.ndarray]): blending function
+
+        Returns:
+            np.ndarray: classmap resulted by applying blending function on the multi-layer image
+        """
+
         layers = self.mask_layers
         ls = [l.classmap() for l in layers]
         ls = np.dstack(ls)
         return fusion_func(ls)
 
     def get_dp_ready(self, fusion_func : Callable[[np.ndarray], np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
+        """Getting a data item ready to use in deep learning application
+
+        Args:
+            fusion_func (Callable[[np.ndarray], np.ndarray]): blending function
+
+        Returns:
+            Tuple[np.ndarray, np.ndarray]: a tuple containing the original image and target class map
+        """
+
         return (
             self.original_layer.image,
             self.get_classmap(fusion_func)
         )
 
     def classmap(self) -> np.ndarray:
+        """Calculating class map using default blending function
+
+        Returns:
+            np.ndarray: class map representing the class map using the given categories
+        """
         return self.get_classmap(lambda x : np.amax(x, axis = 2))
 
     def blended_image(self, 
         blending_func : Callable[[np.ndarray, List[np.ndarray]], Any] = default_create_blendimage_func
     ) -> Image:
+        """Render a blended version of the multi-layer image
+
+        Args:
+            blending_func (Callable[[np.ndarray, List[np.ndarray]], Any], optional): blending function. Defaults to default_create_blendimage_func.
+
+        Returns:
+            Image: _description_
+        """
+
         orig = self.original_layer.image
         layers = list(map(lambda x : x.classmap(), self.layers))
         return blending_func(orig, layers)
     
     def thumbnail(self, size : Tuple[int,int] = (400,350)) -> Image:
+        """Making thumbnail of the multi-layer image
+
+        Args:
+            size (Tuple[int,int], optional): Size of thumbnail image. Defaults to (400,350).
+
+        Returns:
+            Image: thumbnail version of the image
+        """
+
         img = self.blended_image()
         img.thumbnail(size)
         return img
 
     @property
     def original_layer(self) -> Layer:
+        """Original layer of the multi-layer image
+
+        Returns:
+            Layer: an instance of the original layer
+        """
         return self.orig_layer
     
     @property
     def mask_layers(self) -> Tuple[Layer]:
+        """List of mask layer
+
+        Returns:
+            Tuple[Layer]: List of masks
+        """
         return tuple(self.layers)
 
     @property
     def layer_names(self) -> Tuple[str]:
+        """Getting a list of mask layers in the multi-layer image
+
+        Returns:
+            Tuple[str]: List of mask layers
+        """
         return self.get_layer_names()
 
     @property
-    def dimension(self):
+    def dimension(self) -> Tuple[int,int]:
+        """Getting the dimension of multi-layer image
+
+        Returns:
+            Tuple[int,int]: the size of multi-layer image
+        """
         return self.orig_layer.dimension
 
     @property
-    def width(self):
+    def width(self) -> int:
+        """Width of the multi-layer image
+
+        Returns:
+            int: Width of the multi-layer image
+        """
         return self.dimension[1]
 
     @property
-    def height(self):
+    def height(self) -> int:
+        """Height of the multi-layer image
+
+        Returns:
+            int: Height of the multi-layer image
+        """
         return self.dimension[0]
 
     @property
-    def count_layers(self):
+    def count_layers(self) -> int:
+        """Getting the number of mask and original layers 
+
+        Returns:
+            int: number of layers (mask and original)
+        """
         return len(self.layers) + 1
 
     def __iter__(self):
+        """Getting an iterator for surveying layers in the multi-layer image
+
+        Returns:
+            iter: iterator
+        """
         return iter(tuple([self.orig_layer]) + self.mask_layers)
     
     def __str__(self) -> str:
+        """Returing the string representation of multi-layer image"""
         return f'{self.title} (Layers : {self.count_layers}) [Dimension : {self.dimension}]'
 
-    def __getitem__(self, key) -> Union[Dict, Layer] :
+    def __getitem__(self, key : str) -> Union[Dict, Layer] :
+        """Getting an entity from multi-layer image
+
+        Args:
+            key (str): the name of the entity
+
+        Raises:
+            ValueError: if the entity does not exist
+
+        Returns:
+            Union[Dict, Layer]: layer if the `key` is a layer name and properties if key is `properties`.
+        """
         res = None
         if key == 'properties':
             res = self.properties
