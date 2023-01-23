@@ -12,6 +12,9 @@ from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY, from_image
 
 @mmfile_handler('gimp', ['xcf'])
 class GIMPFileHandler(BaseFileHandler):
+    """
+    GIMP file handler for loading and saving gimp files (*.xcf).
+    """
 
     __file_formats__ = ['jpg', 'jpeg', 'png', 'tiff', 'bmp']
     __gimp_extension = '.xcf'
@@ -20,6 +23,18 @@ class GIMPFileHandler(BaseFileHandler):
         super().__init__(categories)
     
     def load(self, filepath: str) -> phmImage:
+        """Load the multi-layer image using the presented file path (gimp file).
+
+        Args:
+            filepath (str): the path to a gimp file
+
+        Raises:
+            ValueError: if file does not exist
+            ValueError: if file extension does not supported by GIMP handler.
+
+        Returns:
+            phmImage: Loaded multi-layer image
+        """
         # Argument initialization and checking
         if not Path(filepath).is_file():
             raise ValueError(message=f'The file ({filepath}) does not exist!')
@@ -63,4 +78,13 @@ class GIMPFileHandler(BaseFileHandler):
         )
 
     def save(self, img: phmImage, filepath: str):
+        """Save a multi-layer image as a gimp file
+
+        Args:
+            img (phmImage): Multi-layer image
+            filepath (str): Path of gimp file
+
+        Raises:
+            NotImplementedError: GIMP file handler does not support saving images.
+        """
         raise NotImplementedError('Update feature is not implemented yet!')

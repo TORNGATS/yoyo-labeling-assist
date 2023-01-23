@@ -105,10 +105,32 @@ class BaseFileHandler(ABC):
             self.categories = categories
 
     def is_valid(self, filepath : str) -> bool:
+        """Check if the file path is valid based on the file extension
+
+        Args:
+            filepath (str): The given file path of the multi-layer file
+
+        Returns:
+            bool: `True` if file extension is supported by this file handler
+        """
         fext = pathlib.Path(filepath).suffix.replace('.', '')
         return fext in self.file_extensions
 
     def __call__(self, filepath : str, img : phmImage = None) -> Any:
+        """A call function for saving and loading the images.
+        if the `img` is None, the function acts as loading function and uses the `filepath` to load the multi-layer image.
+        Otherwise, it uses the `filepath` to save the `img`.
+
+        Args:
+            filepath (str): The file path
+            img (phmImage, optional): the multi-layer image. Defaults to None.
+
+        Raises:
+            ValueError: if the file extension does not supported by this file handler.
+
+        Returns:
+            Any: returns None if the function acts as the save function. Otherwise, it returns the loaded multi-layer image.
+        """
         if not self.is_valid(filepath):
             raise ValueError("File extension is not supported by the selected file handler!")
 
