@@ -1,4 +1,8 @@
 
+"""
+yoyo66.handler.core contains all the base functionalities for file handlers
+"""
+
 import os.path
 import random
 import pathlib
@@ -10,14 +14,20 @@ from yoyo66.datastruct import phmImage
 
 # List of file handlers
 file_handlers = {}
+# List of file extensions supported by the defined file handlers
 __supported_file_extensions = []
 
-def mmfile_handler(name, file_extensions : List[str]):
-    """ 
-    The decorator presenting the file handler
+def mmfile_handler(name : str, file_extensions : List[str]):
+    """This decorator is used to introduce an implemented file handler to the library.
+    In order to implement a file handler, the decorator is used on top of the implemented file handler
+    that is inherited from ``BaseFileHandler`` class.
 
     Args:
-        name (str): name of the file handler
+        name (str): name of the file handler that the system use to call the handler
+        file_extensions (List[str]): the supported file extensions
+
+    Raises:
+        TypeError : if the file extension is not supported but any of presented file handler.
     """
     def __embed_clss(clss):
         global file_handlers
@@ -35,7 +45,18 @@ def mmfile_handler(name, file_extensions : List[str]):
 
     return __embed_clss
 
-def get_file_extensions(handler : str) -> str:
+def get_file_extensions(handler : str) -> List[str]:
+    """Gets the file extensions supported by the specified file handlers.
+
+    Args:
+        handler (str): the name of file handler
+
+    Raises:
+        KeyError: if the specified file handler is not registered.
+
+    Returns:
+        str: the list of supported file extensions
+    """
     global file_handlers
     if not handler in file_handlers:
         raise KeyError(f'{handler} does not supported!')
@@ -49,17 +70,26 @@ def list_file_handlers() -> Tuple:
     """
     return file_handlers
 
-def list_handler_names() -> Tuple:
+def list_handler_names() -> Tuple[str]:
+    """ The list of file handlers' name
+
+    Returns:
+        Tuple[str]: list of registered file handlers's name
+    """
     return tuple(file_handlers.keys())
 
 class BaseFileHandler(ABC):
     """
-    This is the base class for all file handlers
+    Base class for all file handlers
     """
 
     def __init__(self,
         categories : Union[Dict[str, int], List[str]]
     ) -> None:
+        """
+        Args:
+            categories (Union[Dict[str, int], List[str]]): List of categories used to interpret the class map presented by the multi-layer image.
+        """
         super().__init__()
 
         # File extensions filled by the creator method
@@ -91,13 +121,40 @@ class BaseFileHandler(ABC):
         
     @abstractmethod
     def load(self, filepath : str) -> phmImage:
+        """Load a multi-layer image using the presented file path.
+
+        Args:
+            filepath (str): File path
+
+        Returns:
+            phmImage: Loaded multi-layer image
+        """
         pass
 
     @abstractmethod
     def save(self, img : phmImage, filepath : str) -> None:
+        """Save a multi-layer image in the specified file path.
+
+        Args:
+            img (phmImage): a multi-layer image
+            filepath (str): the specified file path for saving the image
+        """
         pass
 
 def build_by_name(name : str, categories : Union[Dict[str, int], List[str]]) -> BaseFileHandler:
+    """Build an instance of a file handler based on the given name
+
+    Args:
+        name (str): name of the file handler
+        categories (Union[Dict[str, int], List[str]]): List of categories used to interpret the class map presented by the multi-layer image
+
+    Raises:
+        KeyError: if the given name is not a registered file handler
+
+    Returns:
+        BaseFileHandler: an instance of requested file handler
+    """
+
     if not name in file_handlers:
         raise KeyError(f'{name} does not exist in file handlers!')
 
@@ -108,6 +165,19 @@ def build_by_name(name : str, categories : Union[Dict[str, int], List[str]]) -> 
     return handler
 
 def build_by_file_extension(ext : str, categories : Union[Dict[str, int], List[str]]) -> BaseFileHandler:
+    """Build an instance of a file handler based on the given file extension
+
+    Args:
+        ext (str): the name of file extension
+        categories (Union[Dict[str, int], List[str]]): List of categories used to interpret the class map presented by the multi-layer image
+
+    Raises:
+        KeyError: if the given name is not a registered file handler
+
+    Returns:
+        BaseFileHandler: an instance of requested file handler
+    """
+    
     name = None
     for nm, fxs in file_handlers.items():
         if ext in fxs[-1]:
