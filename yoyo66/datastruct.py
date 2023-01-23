@@ -128,7 +128,7 @@ class phmImage:
             image = orig_image,
             x = 0, y = 0
         )
-   
+
     def get_metric(self, key : str):
         if not key in self.metrics:
             raise KeyError('Metric %s not found' % key)

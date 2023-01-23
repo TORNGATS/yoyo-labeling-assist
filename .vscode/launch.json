@@ -21,11 +21,11 @@
             "justMyCode": true,
             "args": [
                 "--input", "/home/phm/Datasets/Pont Donnacona/*.xcf",
-                "--output", "/home/phm/Datasets/Pont Donnacona_pkg",
+                "--output", "/home/phm/Datasets/Pont Donnacona_tif",
                 "--mode", "directory",
-                "--type", "pkg",
+                "--type", "tiff",
                 "--categories", "tests/resources/categories.json",
-                "-s"
+                // "-s"
             ],
         }
     ]

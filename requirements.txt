@@ -1,3 +1,5 @@
 
 pyora
 progress
+tifffile
+imagecodecs
