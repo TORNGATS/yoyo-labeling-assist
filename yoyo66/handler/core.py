@@ -210,3 +210,27 @@ def build_by_file_extension(ext : str, categories : Union[Dict[str, int], List[s
         raise KeyError(f'{ext} does not associated with any file handler')
 
     return build_by_name(name, categories)
+
+def load_file(filepath : str, categories : Union[Dict[str, int], List[str]]) -> phmImage:
+    """A quick access for loading a file based on its file extension.
+
+    Args:
+        filepath (str): file path of the multi-layer image file
+        categories (Union[Dict[str, int], List[str]]): categories associated to the multi-layer file
+
+    Raises:
+        ValueError: if file does not exist
+
+    Returns:
+        phmImage: Loaded multi-layer image
+    """
+    
+    if not os.path.isfile(filepath):
+        raise ValueError(f'File is invalid: {filepath}')
+
+    # Extract file extension of the given file
+    ext = pathlib.Path(filepath).suffix.replace('.', '')
+    # Loading the file handler based on the given file extension
+    handler = build_by_file_extension(ext, categories)
+    
+    return handler.load(filepath)

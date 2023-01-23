@@ -28,5 +28,21 @@
                 // "-s"
             ],
         }
+        {
+            "name": "Python: Analyzer CLI",
+            "type": "python",
+            "request": "launch",
+            "program": "yoyo66/yoyo66_analyzer.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "/home/phm/Datasets/Pont Donnacona/*.xcf",
+                "--output", "/home/phm/Datasets/Pont Donnacona_tif",
+                "--mode", "directory",
+                "--type",       "tiff",
+                "--categories", "tests/resources/categories.json",
+                // "-s"
+            ],
+        }
     ]
 }

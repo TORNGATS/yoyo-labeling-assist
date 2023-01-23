@@ -49,6 +49,25 @@ class Layer:
         """
         return self.image is not None
 
+    def is_empty(self) -> bool:
+        return np.sum(self.image)
+    
+    def get_stats(self) -> Dict[str, float]:
+        """Provide statistics about the layer
+
+        Returns:
+            Dict[str, float]: Calculated statistics
+        """
+        total = self.dimension[0] * self.dimension[1]
+        if total == 0: 
+            total = 1
+        dcount = np.sum(self.image)
+        return {
+            'pixcount' : dcount,
+            'total' : total,
+            'cover' : (dcount / total) * 100
+        }
+
     def classmap(self) -> np.ndarray:
         """Calculate class map of the layer. The class map uses the mask and the classid to create class map.
 
@@ -152,6 +171,30 @@ class phmImage:
             image = orig_image,
             x = 0, y = 0
         )
+
+    def get_stats(self, categories : Dict[str, int]):
+        """Provides statistics about the multi-layer image
+
+        Args:
+            categories (Dict[str, int]): the categories of interest
+        """
+        lstats = {}
+        # Layers statistics
+        for layer in self.layers:
+            sts = layer.get_stats()
+            if sts['pixcount'] == 0:
+                continue
+            for k,v in sts.items():
+                lstats[f'{layer.name.title()} {k.title()}'] += v
+        # Image statistics
+        ls = np.dstack([l.image for l in self.layers])
+        ls = np.max(ls, axis = 2)
+        mask_cover = (np.sum(ls) / (self.dimension[0], self.dimension[1])) * 100    
+        return {
+            **lstats,
+            'Name' : self.filename,
+            'Mask Cover' : mask_cover
+        }
 
     def get_metric(self, key : str) -> Any:
         """Returning the metric stored inside the multi-layer image

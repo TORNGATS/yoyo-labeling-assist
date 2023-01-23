@@ -29,6 +29,7 @@ class GIMP_Test(unittest.TestCase):
         gimp = build_by_name('gimp', {'Crack' : 100, 'SurfDeg' : 200})
         img = gimp.load(self.file)
         print(img)
+        img.get_stats({'Crack' : 100, 'SurfDeg' : 200})
         
     def test_blend_and_thumbnail(self):
         file = "tests/resources/gimp_1.xcf"

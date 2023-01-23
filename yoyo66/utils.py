@@ -1,10 +1,20 @@
 
 
+import csv
+import glob
 import os.path
 from pathlib import Path
-from typing import Dict, Any, List, Union
+from typing import Dict, Any, List, Union, Tuple
 
 from yoyo66.handler import BaseFileHandler, build_by_file_extension, build_by_name
+from yoyo66.handler import (
+    GIMPFileHandler, 
+    OpenRasterFileHandler, 
+    PKGFileHandler,
+    list_handler_names,
+    get_file_extensions,
+    load_file
+)
 
 class ConvertHandler:
     """
@@ -148,3 +158,18 @@ def convert_file__(src_file : str, dest_file : str, categories : Union[Dict[str,
         source_file = src_file,
         dest_file = dest_file
     )
+
+def calculate_stats(files : List[str], categories : Dict) -> Tuple[Tuple, List[Dict[str, int]]]:
+    
+    img_stats = []
+    fieldnames = []
+    for fin in files:
+        img = load_file(fin, categories)
+        sts = img.get_stats(categories)
+        img_stats.append(sts)
+        fieldnames.append(sts.keys())
+    # Make the list of fields
+    fieldnames = set(fieldnames)
+    
+    return fieldnames, img_stats
+    
