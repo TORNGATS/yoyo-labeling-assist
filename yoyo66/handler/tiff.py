@@ -10,6 +10,9 @@ from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY, create_image,
 
 @mmfile_handler('tiff', ['tif'])
 class TiffFileHandler(BaseFileHandler):
+    """
+    Tiff file handler for loading and saving pkg files (*.tif).
+    """
 
     __ORIGINAL_LAYER = 'Original'
     __METRIC_STARTKEY = 'metric_'
@@ -18,6 +21,15 @@ class TiffFileHandler(BaseFileHandler):
         super().__init__(categories)
 
     def load(self, filepath: str) -> phmImage:
+        """Load the multi-layer image using the presented file path (tiff file).
+
+        Args:
+            filepath (str): the path to an tiff file
+
+        Returns:
+            phmImage: Loaded multi-layer image
+        """
+
         orig_img = None
         properties = {}
         metrics = {}
@@ -59,7 +71,14 @@ class TiffFileHandler(BaseFileHandler):
 
 
     def save(self, img: phmImage, filepath: str) -> None:
-         with TiffWriter(filepath) as tif:
+        """Save a multi-layer image as a tiff file
+
+        Args:
+            img (phmImage): Multi-layer image
+            filepath (str): Path of tiff file
+        """
+
+        with TiffWriter(filepath) as tif:
             #  Save Original image
             metrics = {}
             for k, v in img.metrics:
