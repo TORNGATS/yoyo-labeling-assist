@@ -13,6 +13,10 @@ from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY, create_image,
 
 @mmfile_handler('pkg', ['pkg'])
 class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
+    """
+    PKG file handler for loading and saving pkg files (*.pkg).
+    """
+
 
     __METAINFO_FILE = 'meta.info'
     __PROP_FILE = 'properties.json'
@@ -22,6 +26,15 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
         super().__init__(categories)
         
     def load(self, filepath: str) -> phmImage:
+        """Load the multi-layer image using the presented file path (pkg file).
+
+        Args:
+            filepath (str): the path to an openraster file
+
+        Returns:
+            phmImage: Loaded multi-layer image
+        """
+        
         metainfo = {}
         props = {}
         metrics = {}
@@ -65,6 +78,13 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
         )
 
     def save(self, img: phmImage, filepath: str):
+        """Save a multi-layer image as an pkg file
+
+        Args:
+            img (phmImage): Multi-layer image
+            filepath (str): Path of openraster file
+        """
+
         with zipfile.ZipFile(filepath, mode = 'w') as pkg:
             img_list = {}
             # Save properties

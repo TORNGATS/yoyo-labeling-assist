@@ -12,7 +12,7 @@ from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY, create_image,
 @mmfile_handler('openraster', ['ora'])
 class OpenRasterFileHandler(BaseFileHandler):
     """
-    OpenRaster file handler for loading and saving gimp files (*.ora).
+    OpenRaster file handler for loading and saving openraster files (*.ora).
     """
 
     __ora_extension = '.ora'
