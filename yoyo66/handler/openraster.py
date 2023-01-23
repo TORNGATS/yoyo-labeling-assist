@@ -11,6 +11,9 @@ from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY, create_image,
 
 @mmfile_handler('openraster', ['ora'])
 class OpenRasterFileHandler(BaseFileHandler):
+    """
+    OpenRaster file handler for loading and saving gimp files (*.ora).
+    """
 
     __ora_extension = '.ora'
     __ORIG_LAYER_KEY = '/original'
@@ -22,6 +25,20 @@ class OpenRasterFileHandler(BaseFileHandler):
         super().__init__(categories)
     
     def load(self, filepath: str) -> phmImage:
+        """Load the multi-layer image using the presented file path (openraster file).
+
+        Args:
+            filepath (str): the path to an openraster file
+
+        Raises:
+            ValueError: if file does not exist
+            ValueError: if file extension does not supported by GIMP handler.
+            ValueError: if openraster file format is invalid
+
+        Returns:
+            phmImage: Loaded multi-layer image
+        """
+
         # Argument initialization and checking
         if not Path(filepath).is_file():
             raise ValueError(message=f'The file ({filepath}) does not exist!')
@@ -78,6 +95,12 @@ class OpenRasterFileHandler(BaseFileHandler):
         )
 
     def save(self, img: phmImage, filepath: str):
+        """Save a multi-layer image as an openraster file
+
+        Args:
+            img (phmImage): Multi-layer image
+            filepath (str): Path of openraster file
+        """
         project = Project.new(width = img.width, height = img.height)
         # Create original layer
         orig_layer = project.add_layer(Image.fromarray(img.orig_layer.image), self.__ORIG_LAYER_KEY)
