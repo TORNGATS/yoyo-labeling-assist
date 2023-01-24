@@ -25,7 +25,7 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
     def __init__(self, categories: Union[Dict[str, int], List[str]]) -> None:
         super().__init__(categories)
         
-    def load(self, filepath: str) -> phmImage:
+    def load(self, filepath: str, only_imgs : bool = False) -> phmImage:
         """Load the multi-layer image using the presented file path (pkg file).
 
         Args:
@@ -41,15 +41,16 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
         orig_img = None
         layers = []
         with zipfile.ZipFile(filepath, mode = 'r') as pkg:
-            # metadata
-            with pkg.open(self.__METAINFO_FILE) as f:
-                metainfo = json.loads(f.read())
-            # properties
-            with pkg.open(self.__PROP_FILE) as f:
-                props = json.loads(f.read())
-            # metrics
-            with pkg.open(self.__METRICS_FILE) as f:
-                metrics = json.loads(f.read())
+            if not only_imgs:
+                # metadata
+                with pkg.open(self.__METAINFO_FILE) as f:
+                    metainfo = json.loads(f.read())
+                # properties
+                with pkg.open(self.__PROP_FILE) as f:
+                    props = json.loads(f.read())
+                # metrics
+                with pkg.open(self.__METRICS_FILE) as f:
+                    metrics = json.loads(f.read())
             # original image
             orig_file = pkg.open(metainfo['original']['file'])
             orig_img = np.asarray(Image.open(orig_file))

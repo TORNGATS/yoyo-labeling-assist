@@ -142,7 +142,7 @@ class BaseFileHandler(ABC):
             self.save(img, filepath)
         
     @abstractmethod
-    def load(self, filepath : str) -> phmImage:
+    def load(self, filepath : str, only_imgs : bool = False) -> phmImage:
         """Load a multi-layer image using the presented file path.
 
         Args:

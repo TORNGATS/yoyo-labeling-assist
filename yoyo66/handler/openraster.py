@@ -24,7 +24,7 @@ class OpenRasterFileHandler(BaseFileHandler):
     def __init__(self, categories: Union[Dict[str, int], List[str]]) -> None:
         super().__init__(categories)
     
-    def load(self, filepath: str) -> phmImage:
+    def load(self, filepath: str, only_imgs : bool = False) -> phmImage:
         """Load the multi-layer image using the presented file path (openraster file).
 
         Args:
