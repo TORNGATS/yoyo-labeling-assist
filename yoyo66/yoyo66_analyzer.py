@@ -7,7 +7,6 @@ import glob
 import csv
 
 from pathlib import Path
-from progress.bar import Bar
 
 sys.path.append(os.getcwd())
 sys.path.append(__file__)
