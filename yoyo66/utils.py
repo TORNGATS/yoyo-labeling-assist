@@ -159,17 +159,20 @@ def convert_file__(src_file : str, dest_file : str, categories : Union[Dict[str,
         dest_file = dest_file
     )
 
-def calculate_stats(files : List[str], categories : Dict) -> Tuple[Tuple, List[Dict[str, int]]]:
+def calculate_stats(files : List[str], categories : Dict) -> Tuple[Tuple[str], List[Dict[str, int]]]:
     
-    img_stats = []
+    img_stats = {}
     fieldnames = []
     for fin in files:
+        print(f'Analyzing >> {fin}')
         img = load_file(fin, categories)
         sts = img.get_stats(categories)
-        img_stats.append(sts)
-        fieldnames.append(sts.keys())
-    # Make the list of fields
-    fieldnames = set(fieldnames)
+        img_stats[sts['Name']] = sts
+        # img_stats.append(sts)
+        # fieldnames.extend(list(sts.keys()))
+        yield list(sts.keys()), sts
+    # # Make the list of fields
+    # fieldnames = set(fieldnames)
     
-    return fieldnames, img_stats
+    # return fieldnames, img_stats
     

@@ -51,22 +51,30 @@ def main__():
         ValueError("output must be a directory")
     
     files = glob.glob(args.sourcepath)
-    fieldnames, stats = calculate_stats(files, categories)
-        
+
+    fieldnames = []
+    for fnames, stats in calculate_stats(files, categories):
+        fieldnames.extend(fnames)
+    # fieldnames, stats = calculate_stats(files, categories)
+
     result = {}
     if args.statsfile is not None and os.path.isfile(args.statsfile):
         with open(args.statsfile, mode='r') as fin:    
             reader = csv.DictReader(fin)
             records = list(reader)
             for r in records:
-                result[r['Name']] = r
+                name = Path(r['Name']).stem
+                result[name] = {**r, **stats[name]} if name in stats else r
+                fieldnames.extend(list(r.keys()))
+    else:
+        result = stats
                 
-    
     # Write the per image stats
     with open(os.path.join(args.output, 'stats.csv'), mode='w') as fout:
-        writer = csv.writer(fout, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL, fieldnames=fieldnames)
+        writer = csv.DictWriter(fout, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL, fieldnames=set(fieldnames))
         writer.writeheader()
-        for sts in stats:
+        for sts in result.values():
             writer.writerow(sts)
-        
-        
+
+if __name__ == "__main__":
+    main__()

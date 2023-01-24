@@ -27,7 +27,7 @@
                 "--categories", "tests/resources/categories.json",
                 // "-s"
             ],
-        }
+        },
         {
             "name": "Python: Analyzer CLI",
             "type": "python",
@@ -37,11 +37,9 @@
             "justMyCode": true,
             "args": [
                 "/home/phm/Datasets/Pont Donnacona/*.xcf",
-                "--output", "/home/phm/Datasets/Pont Donnacona_tif",
-                "--mode", "directory",
-                "--type",       "tiff",
-                "--categories", "tests/resources/categories.json",
-                // "-s"
+                "--output", "/home/phm/Datasets/",
+                "--categories", "/home/phm/Datasets/categories.json",
+                "--statsfile", "/home/phm/Datasets/Pont Donaconna.csv"
             ],
         }
     ]

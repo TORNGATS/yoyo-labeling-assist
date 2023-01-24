@@ -179,21 +179,24 @@ class phmImage:
             categories (Dict[str, int]): the categories of interest
         """
         lstats = {}
+        defects = []
         # Layers statistics
         for layer in self.layers:
             sts = layer.get_stats()
             if sts['pixcount'] == 0:
                 continue
+            defects.append(layer.name)
             for k,v in sts.items():
-                lstats[f'{layer.name.title()} {k.title()}'] += v
+                lstats[f'{layer.name.title()} {k.title()}'] = v
         # Image statistics
         ls = np.dstack([l.image for l in self.layers])
         ls = np.max(ls, axis = 2)
-        mask_cover = (np.sum(ls) / (self.dimension[0], self.dimension[1])) * 100    
+        mask_cover = (np.sum(ls) / (self.dimension[0] * self.dimension[1])) * 100    
         return {
             **lstats,
-            'Name' : self.filename,
-            'Mask Cover' : mask_cover
+            'Name' : self.title,
+            'Mask Cover' : mask_cover,
+            'Defects' : ','.join(map(str, set(defects))) 
         }
 
     def get_metric(self, key : str) -> Any:
