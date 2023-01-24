@@ -21,8 +21,14 @@ state "File Handler" as handler {
 
     state "GIMP (*.xcf)"
     state "OpenRaster (*.ora)"
-    state "TORNGATS (*.pkg)"
     state "Multi-page Tiff (*.tif)"
+    state "TORNGATS (*.pkg)" as pkg {
+        state "Metrics" as pkg_metrics
+        state "Properties" as pkg_properties
+        state "Metadata" as pkg_metadata
+        state "Layers" as pkg_layers
+        state "States" as pkg_states
+    }
 
     state load <<entryPoint>>
     state save <<entryPoint>>
@@ -38,51 +44,5 @@ state "File Converter" as conv {
 }
 
 Dataset --> conv
-
-' state "Thermal Sequence Analysis" as tsa {
-'     state "Continuous Thermal Sequence" as acts {
-'     }
-'     state "Discrete Thermal Sequence" as adts {
-'         adts : Datasets are sampled using fixed time period
-'     }
-'     state "Regressed Thermal Sequence" as rts {
-'         state "Polynomial Regression" as pr_rts
-'         state "Step Functio" as sf_rts
-'         state "Basis Function" as bf_rts
-'         state "Spline Regression" as sr_rts
-'         state "Smoothing Splines" as ss_rts
-'         state "Local Regression" as lr_rts
-'         state "Generalized Additive Models" as gam_rts
-'         rts --[hidden]> pr_rts
-'         rts --[hidden]> sf_rts
-'         rts --[hidden]> bf_rts
-'         ss_rts --[hidden]> sr_rts
-'         rts --[hidden]> sr_rts
-'     }
-'     acts --> sequence <<exitPoint>>
-'     adts --> sequence <<exitPoint>>
-'     rts --> sequence <<exitPoint>>
-' }
-
-' Dataset --> acts
-' Dataset --> adts
-' Dataset --> rts
-
-
-' state "Defect Assessment using Thermal Sequence" as dats {
-'     state "PCA" as pca
-'     state "PPT" as ppt
-' }
-
-' sequence --> pca
-' sequence --> ppt
-
-' state "Calculation of Metrics for Evaluation" as cme {
-'     state data <<entryPoint>>
-' }
-
-' ppt --> data
-' pca --> data
-' cme -l-> [*]
 
 @enduml
