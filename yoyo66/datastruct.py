@@ -355,6 +355,18 @@ class phmImage:
         img.thumbnail(size)
         return img
 
+    def to_img_dict(self) -> Dict[str, np.ndarray]:
+        """Provides a dictionary representation of the multi-layer image where original image and layers are packed.
+
+        Returns:
+            Dict[str, np.ndarray]: image and the layers packed as a dictionary
+        """
+        result = {'Original': self.original_layer.image}
+        for layer in self.layers:
+            result[layer.name] = layer.image
+        
+        return result
+
     @property
     def original_layer(self) -> Layer:
         """Original layer of the multi-layer image
