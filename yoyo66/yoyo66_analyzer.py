@@ -7,6 +7,7 @@ import glob
 import csv
 
 from pathlib import Path
+from progress import Bar
 
 sys.path.append(os.getcwd())
 sys.path.append(__file__)
@@ -52,9 +53,10 @@ def main__():
     files = glob.glob(args.sourcepath)
 
     fieldnames = []
-    for fnames, stats in calculate_stats(files, categories):
-        fieldnames.extend(fnames)
-    # fieldnames, stats = calculate_stats(files, categories)
+    with Bar(' Analyzing', max=len(files), suffix='%(percent)d%%') as bar:
+        for fnames, stats in calculate_stats(files, categories):
+            fieldnames.extend(fnames)
+            bar.next()
 
     result = {}
     if args.statsfile is not None and os.path.isfile(args.statsfile):

@@ -16,6 +16,7 @@ from yoyo66.handler import (
     load_file
 )
 
+
 class ConvertHandler:
     """
     The base class for handling conversion between multi-layer imagery file formats. 
@@ -159,20 +160,22 @@ def convert_file__(src_file : str, dest_file : str, categories : Union[Dict[str,
         dest_file = dest_file
     )
 
-def calculate_stats(files : List[str], categories : Dict) -> Tuple[Tuple[str], List[Dict[str, int]]]:
+def calculate_stats(files : List[str], categories : Dict[str, int]) -> Tuple[Tuple[str], List[Dict[str, int]]]:
+    """Calculate statistics for the multi-layer imagery files.
+
+    Args:
+        files (List[str]): List of multi-layer imagery files
+        categories (Dict[str, int]): categories containing the class names and associated class ids
+
+    Returns:
+        Tuple[Tuple[str], List[Dict[str, int]]]: a tuple containing the list of fields and a dictionary of statistics name and their values.
+
+    Yields:
+        Iterator[Tuple[Tuple[str], List[Dict[str, int]]]]: _description_
+    """
     
-    img_stats = {}
-    fieldnames = []
     for fin in files:
-        print(f'Analyzing >> {fin}')
         img = load_file(fin, categories)
         sts = img.get_stats(categories)
-        img_stats[sts['Name']] = sts
-        # img_stats.append(sts)
-        # fieldnames.extend(list(sts.keys()))
         yield list(sts.keys()), sts
-    # # Make the list of fields
-    # fieldnames = set(fieldnames)
-    
-    # return fieldnames, img_stats
     

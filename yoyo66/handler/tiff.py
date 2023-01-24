@@ -69,7 +69,6 @@ class TiffFileHandler(BaseFileHandler):
             metrics = metrics
         )
 
-
     def save(self, img: phmImage, filepath: str) -> None:
         """Save a multi-layer image as a tiff file
 
