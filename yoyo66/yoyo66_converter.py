@@ -35,6 +35,7 @@ def main__():
     parser.add_argument('-t', '--type', nargs = '?', choices = list_handler_names(), help = 'Determine the targeted file type. The file type is only used when the output is a directory')
     parser.add_argument('-c', '--categories', default = 'category.json', type = str, help = 'Specify the file (*.json) containing the categories and its associated class ids.')
     parser.add_argument('-s', '--silent', action='store_true')
+    parser.add_argument('-o', '--override', action='store_true')
     
     args = parser.parse_args()
     
@@ -55,25 +56,34 @@ def main__():
     
     create_out_filepath = lambda fin, fout, type : os.path.join(fout, f'{Path(os.path.basename(fin)).stem}.{get_file_extensions(type)[0]}')
     
+    files = []
     infile = args.input
     outfile = args.output
+
     if args.mode == 'file':
         if not os.path.isfile(args.input):
             print("input filepath is invalid!")
             return -1
-        outfile = outfile if not os.path.isdir(outfile) else create_out_filepath(infile, outfile, args.type) 
+        outfile = outfile if not os.path.isdir(outfile) else create_out_filepath(infile, outfile, args.type)
+        files = [outfile]
+        if not args.override and os.path.isfile(outfile):
+                return -1
         convert_file__(infile, outfile, categories)
     elif args.mode == 'directory':
         if not os.path.isdir(outfile):
             print("output field must be a directory path")
 
         files = glob.glob(infile)
+        
         with Bar(' Converting', max=len(files), suffix='%(percent)d%%') as bar:
             for fin in files:
                 outfile = args.output
                 bar.message = fin
                 try:
                     outfile = create_out_filepath(fin, outfile, args.type)
+                    if not args.override and os.path.isfile(outfile):
+                        continue
+
                     convert_file__(fin, outfile, categories)
                     print(' Successful')
                 except Exception as ex:
