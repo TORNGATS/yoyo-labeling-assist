@@ -72,6 +72,7 @@ def main__():
     elif args.mode == 'directory':
         if not os.path.isdir(outfile):
             print("output field must be a directory path")
+            return -1
 
         files = glob.glob(infile)
         
