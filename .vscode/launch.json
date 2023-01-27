@@ -24,7 +24,7 @@
                 "--output", "/home/phm/Datasets/Test_pkg",
                 "--mode", "directory",
                 "--type", "pkg",
-                "--classnames", "Crack SurfDeg"
+                // "--classnames", "Crack SurfDeg"
                 // "--categories", "tests/resources/categories.json",
                 // "-s"
             ],
