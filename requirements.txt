@@ -1,4 +1,5 @@
 
+gimpformats
 pyora
 progress
 tifffile

@@ -7,7 +7,7 @@ import glob
 import csv
 
 from pathlib import Path
-from progress import Bar
+from progress.bar import Bar
 
 sys.path.append(os.getcwd())
 sys.path.append(__file__)
@@ -16,12 +16,9 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from yoyo66.handler import (
     GIMPFileHandler, 
     OpenRasterFileHandler, 
-    PKGFileHandler,
-    list_handler_names,
-    get_file_extensions,
-    load_file
+    PKGFileHandler
 )
-from yoyo66.utils import convert_file__, calculate_stats
+from yoyo66.utils import calculate_stats
 
 def main__():
     parser = argparse.ArgumentParser(
@@ -33,19 +30,10 @@ def main__():
     
     parser.add_argument('sourcepath', help = 'Search path for loading the multi-layer image files')
     parser.add_argument('-o', '--output', default = os.getcwd(), type = str, help = 'directory path for the result')
-    parser.add_argument('-c', '--categories', default = 'category.json', type = str, help = 'Specify the file (*.json) containing the categories and its associated class ids.')
+    parser.add_argument('-c', '--classnames', type = str, nargs='*', help = 'Specify the list of class labels.')
     parser.add_argument('-s', '--statsfile', type = str, default = None, help = 'The file containing list of files and associated profiles')
     
     args = parser.parse_args()
-    
-    # Load categories file (json)
-    if args.categories is None or not os.path.isfile(args.categories):
-        print("categories must be specified! and the filepath needs to be valid")
-        return -1
-    
-    categories = None
-    with open(args.categories) as catfile:
-        categories = json.load(catfile)
     
     if not os.path.isdir(args.output):
         ValueError("output must be a directory")
@@ -54,7 +42,7 @@ def main__():
 
     fieldnames = []
     with Bar(' Analyzing', max=len(files), suffix='%(percent)d%%') as bar:
-        for fnames, stats in calculate_stats(files, categories):
+        for fnames, stats in calculate_stats(files, args.classnames):
             fieldnames.extend(fnames)
             bar.next()
 
