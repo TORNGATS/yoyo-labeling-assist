@@ -1,4 +1,5 @@
 
+import random
 import numpy as np
 
 from PIL import Image
@@ -21,7 +22,7 @@ class OpenRasterFileHandler(BaseFileHandler):
     __PROPERTIES_KEY = 'prop_'
     __METRICS_KEY = 'metrics_'
 
-    def __init__(self, categories: Union[Dict[str, int], List[str]]) -> None:
+    def __init__(self, categories: Union[Dict[str, int], List[str]] = {}) -> None:
         super().__init__(categories)
     
     def load(self, filepath: str, only_imgs : bool = False) -> phmImage:
@@ -49,7 +50,7 @@ class OpenRasterFileHandler(BaseFileHandler):
         project = Project.load(filepath)
         # Layer containing original layer
         if not self.__ORIG_LAYER_KEY in project or \
-            not self.__LAYERS_KEY in project:
+           not self.__LAYERS_KEY in project:
             raise ValueError('Invalid file format %s' % filepath)
         
         orig_img = project[self.__ORIG_LAYER_KEY]
@@ -74,9 +75,11 @@ class OpenRasterFileHandler(BaseFileHandler):
                 if img.mode in ("RGBA", "LA") or \
                     (img.mode == "P" and "transparency" in img.info):
                     limg = from_image(img)
-                    if not layer_name in self.categories:
+
+                    class_id = self.init_class_id(layer_name)
+                    if class_id is None:
                         continue
-                    class_id = self.categories[layer_name]
+                    
                     mask_layers.append(Layer(
                         name = layer['name'],
                         opacity = layer['opacity'],

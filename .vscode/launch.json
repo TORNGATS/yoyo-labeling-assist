@@ -20,11 +20,12 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
-                "--input", "/home/phm/Datasets/Pont Donnacona/*.xcf",
-                "--output", "/home/phm/Datasets/Pont Donnacona_tif",
+                "--input", "/home/phm/Datasets/Test/*.xcf",
+                "--output", "/home/phm/Datasets/Test_pkg",
                 "--mode", "directory",
-                "--type", "tiff",
-                "--categories", "tests/resources/categories.json",
+                "--type", "pkg",
+                "--classnames", "Crack SurfDeg"
+                // "--categories", "tests/resources/categories.json",
                 // "-s"
             ],
         },

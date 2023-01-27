@@ -84,25 +84,25 @@ class BaseFileHandler(ABC):
     """
 
     def __init__(self,
-        categories : Union[Dict[str, int], List[str]]
+        filter : List[str] = None
     ) -> None:
         """
         Args:
-            categories (Union[Dict[str, int], List[str]]): List of categories used to interpret the class map presented by the multi-layer image.
+            filter (List[str], optional): List of class names to load. Defaults to None.
         """
         super().__init__()
 
         # File extensions filled by the creator method
         self.file_extensions = []
-        # The field contains the determined categories and associated class id
+
         self.categories = {}
-        # Check if it is a list, convert it to a dictionary
-        if isinstance(categories, List):
-            indexes = random.sample(range(0, 255), len(categories))
-            for index in range(len(categories)):
-                self.categories[categories[index]] = indexes[index]
+        if filter is None or not filter:
+            self._enable_filter = False
         else:
-            self.categories = categories
+            indexes = random.sample(range(0, 255), len(filter))
+            for index in range(len(filter)):
+                self.categories[filter[index]] = indexes[index]
+            self._enable_filter = True
 
     def is_valid(self, filepath : str) -> bool:
         """Check if the file path is valid based on the file extension
@@ -113,7 +113,7 @@ class BaseFileHandler(ABC):
         Returns:
             bool: `True` if file extension is supported by this file handler
         """
-        fext = pathlib.Path(filepath).suffix.replace('.', '')
+        fext = pathlib.Path(filepath).suffix[1:]
         return fext in self.file_extensions
 
     def __call__(self, filepath : str, img : phmImage = None) -> Any:
@@ -140,7 +140,14 @@ class BaseFileHandler(ABC):
         else:
             # if the img field is given, it means the call method uses the given path to save the multi-level imagery file.
             self.save(img, filepath)
-        
+
+    def init_class_id(self, layer_name) -> int:
+        if not layer_name in self.categories:
+            if self._enable_filter:
+                return None
+            self.categories[layer_name] = random.randint(0, 255)
+        return self.categories[layer_name]
+
     @abstractmethod
     def load(self, filepath : str, only_imgs : bool = False) -> phmImage:
         """Load a multi-layer image using the presented file path.
@@ -163,12 +170,12 @@ class BaseFileHandler(ABC):
         """
         pass
 
-def build_by_name(name : str, categories : Union[Dict[str, int], List[str]]) -> BaseFileHandler:
+def build_by_name(name : str, filter : List[str] = None) -> BaseFileHandler:
     """Build an instance of a file handler based on the given name
 
     Args:
         name (str): name of the file handler
-        categories (Union[Dict[str, int], List[str]]): List of categories used to interpret the class map presented by the multi-layer image
+        filter (List[str], optional): List of class names to load. Defaults to None.
 
     Raises:
         KeyError: if the given name is not a registered file handler
@@ -181,17 +188,17 @@ def build_by_name(name : str, categories : Union[Dict[str, int], List[str]]) -> 
         raise KeyError(f'{name} does not exist in file handlers!')
 
     # Instantiate the handler based on the given name
-    handler = file_handlers[name][0](categories)
+    handler = file_handlers[name][0](filter)
     # Initialize the file extensions associated with the handler!
     handler.file_extensions = file_handlers[name][1]
     return handler
 
-def build_by_file_extension(ext : str, categories : Union[Dict[str, int], List[str]]) -> BaseFileHandler:
+def build_by_file_extension(ext : str, filter : List[str] = None) -> BaseFileHandler:
     """Build an instance of a file handler based on the given file extension
 
     Args:
         ext (str): the name of file extension
-        categories (Union[Dict[str, int], List[str]]): List of categories used to interpret the class map presented by the multi-layer image
+        filter (List[str], optional): List of class names to load. Defaults to None.
 
     Raises:
         KeyError: if the given name is not a registered file handler
@@ -209,14 +216,14 @@ def build_by_file_extension(ext : str, categories : Union[Dict[str, int], List[s
     if name is None: 
         raise KeyError(f'{ext} does not associated with any file handler')
 
-    return build_by_name(name, categories)
+    return build_by_name(name, filter)
 
-def load_file(filepath : str, categories : Union[Dict[str, int], List[str]]) -> phmImage:
+def load_file(filepath : str, filter : List[str] = None) -> phmImage:
     """A quick access for loading a file based on its file extension.
 
     Args:
         filepath (str): file path of the multi-layer image file
-        categories (Union[Dict[str, int], List[str]]): categories associated to the multi-layer file
+        filter (List[str], optional): List of class names to load. Defaults to None.
 
     Raises:
         ValueError: if file does not exist
@@ -229,8 +236,8 @@ def load_file(filepath : str, categories : Union[Dict[str, int], List[str]]) -> 
         raise ValueError(f'File is invalid: {filepath}')
 
     # Extract file extension of the given file
-    ext = pathlib.Path(filepath).suffix.replace('.', '')
+    ext = pathlib.Path(filepath).suffix[1:]
     # Loading the file handler based on the given file extension
-    handler = build_by_file_extension(ext, categories)
+    handler = build_by_file_extension(ext, filter)
     
     return handler.load(filepath)

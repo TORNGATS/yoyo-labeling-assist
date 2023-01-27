@@ -120,21 +120,24 @@ def default_create_blendimage_func(orig : np.ndarray, layers : List[np.ndarray])
         Image: the blended image
     """
 
-    # Create the blended layers
-    merged = np.dstack(layers)
-    # The layers are blended together and their priority is based on their class ids, 
-    # So bigger class ids will be preferred pixel by pixel.
-    # It is assumed that the layers have one color channel
-    blayer = np.max(merged, axis = 2)
-    alpha = np.where(blayer != 0, 255, 0).astype(np.int8)
-    
-    blayer = Image.fromarray(blayer, mode = 'L')
-    alpha = Image.fromarray(alpha, mode = 'L')
-    blayer.putalpha(alpha)
-
     lorig = Image.fromarray(orig).convert('RGBA')
     lorig.putalpha(255)
-    return Image.alpha_composite(lorig, blayer.convert('RGBA'))
+    result = lorig
+    if layers is not None and layers:
+        # Create the blended layers
+        merged = np.dstack(layers)
+        # The layers are blended together and their priority is based on their class ids, 
+        # So bigger class ids will be preferred pixel by pixel.
+        # It is assumed that the layers have one color channel
+        blayer = np.max(merged, axis = 2)
+        alpha = np.where(blayer != 0, 255, 0).astype(np.int8)
+        
+        blayer = Image.fromarray(blayer, mode = 'L')
+        alpha = Image.fromarray(alpha, mode = 'L')
+        blayer.putalpha(alpha)
+
+        result = Image.alpha_composite(lorig, blayer.convert('RGBA'))
+    return result
 
 class phmImage:
     """ 
@@ -172,7 +175,7 @@ class phmImage:
             x = 0, y = 0
         )
 
-    def get_stats(self, categories : Dict[str, int]):
+    def get_stats(self):
         """Provides statistics about the multi-layer image
 
         Args:

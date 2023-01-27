@@ -1,4 +1,5 @@
 
+import random
 import zipfile
 import json
 import io
@@ -41,10 +42,10 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
         orig_img = None
         layers = []
         with zipfile.ZipFile(filepath, mode = 'r') as pkg:
+            # metadata (metadata is mandatory for loading the images)
+            with pkg.open(self.__METAINFO_FILE) as f:
+                metainfo = json.loads(f.read())
             if not only_imgs:
-                # metadata
-                with pkg.open(self.__METAINFO_FILE) as f:
-                    metainfo = json.loads(f.read())
                 # properties
                 with pkg.open(self.__PROP_FILE) as f:
                     props = json.loads(f.read())
@@ -56,17 +57,19 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
             orig_img = np.asarray(Image.open(orig_file))
             metainfo.pop('original')
             # layers
-            for lname, info in metainfo.items():
-                if not lname in self.categories:
+            for layer_name, info in metainfo.items():
+
+                class_id = self.init_class_id(layer_name)
+                if class_id is None:
                     continue
-                class_id = self.categories[lname]
-                lfn = metainfo[lname]['file']
+
+                lfn = metainfo[layer_name]['file']
                 lfile = pkg.open(f'layers/{lfn}')
                 img = from_image(Image.open(lfile))
                 layers.append(Layer(
-                    name = lname,
-                    opacity = metainfo[lname]['opacity'],
-                    visibility = metainfo[lname]['visibility'],
+                    name = layer_name,
+                    opacity = metainfo[layer_name]['opacity'],
+                    visibility = metainfo[layer_name]['visibility'],
                     image = img,
                     class_id = class_id))
 
@@ -112,6 +115,9 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
             thumbnail.save(orig_io, format='png')
             pkg.writestr('thumbnail.png', orig_io.getvalue())
             orig_io.close()
+            # Create the layers folder
+            zlayers = zipfile.ZipInfo('layers/')
+            pkg.writestr(zlayers, '')
             # Save Layers
             for layer in img.layers:
                 img_list[layer.name] = {

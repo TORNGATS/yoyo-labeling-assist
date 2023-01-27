@@ -1,4 +1,5 @@
 
+import random
 import numpy as np
 import json
 
@@ -39,11 +40,11 @@ class TiffFileHandler(BaseFileHandler):
                 # Check if the layer is named!
                 if not 'PageName' in page.tags:
                     continue
-                name = page.tags['PageName'].value
+                layer_name = page.tags['PageName'].value
                 # Load image data
                 img = page.asarray()
                 # Loading the original image
-                if name == self.__ORIGINAL_LAYER:
+                if layer_name == self.__ORIGINAL_LAYER:
                     orig_img = img
                     # Loading metadata
                     metadata = json.loads(page.description)
@@ -52,12 +53,15 @@ class TiffFileHandler(BaseFileHandler):
                             metrics[key.replace(self.__METRIC_STARTKEY, '')] = value
                         else:
                             properties[key] = value
-                elif name in self.categories:
-                    classid = self.categories[name]
+                else:
+                    class_id = self.init_class_id(layer_name)
+                    if class_id is None:
+                        continue
+                    
                     img = np.where(np.asarray(img) != 0, 1, 0).astype(np.int8)
                     layers.append(Layer(
-                        name = name,
-                        class_id = classid,
+                        name = layer_name,
+                        class_id = class_id,
                         image = img
                     ))
 

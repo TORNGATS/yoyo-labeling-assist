@@ -1,4 +1,5 @@
 
+import random
 import numpy as np
 
 from PIL import Image
@@ -19,8 +20,8 @@ class GIMPFileHandler(BaseFileHandler):
     __file_formats__ = ['jpg', 'jpeg', 'png', 'tiff', 'bmp']
     __gimp_extension = '.xcf'
 
-    def __init__(self, categories: Union[Dict[str, int], List[str]]) -> None:
-        super().__init__(categories)
+    def __init__(self, filter : List[str] = None) -> None:
+        super().__init__(filter)
     
     def load(self, filepath: str, only_imgs : bool = False) -> phmImage:
         """Load the multi-layer image using the presented file path (gimp file).
@@ -59,17 +60,17 @@ class GIMPFileHandler(BaseFileHandler):
                     img = layer.image
                     if img.mode in ("RGBA", "LA") or \
                         (img.mode == "P" and "transparency" in img.info):
-                        if not layer_name in self.categories:
+
+                        class_id = self.init_class_id(layer_name)
+                        if class_id is None:
                             continue
                         
-                        class_id = self.categories[layer_name]
                         limg = from_image(img)
-                        if not layer_name in self.categories:
-                            continue
                         layers.append(Layer(
                             name = layer_name,
                             class_id = class_id,
                             image = limg))
+
         return phmImage(
             filepath = filepath,
             properties = {},

@@ -106,7 +106,7 @@ class ConvertHandler:
             raise ValueError('provided filepaths are invalid!')
 
 def build_converter(
-    categories : Union[Dict[str, int], List[str]],
+    filter : List[str] = None,
     src_handler : str = None,
     dest_handler : str = None,
     src_fextension : str = None,
@@ -126,16 +126,16 @@ def build_converter(
     src_obj = None
     dest_obj = None
     if src_obj is not None:
-        src_obj = build_by_name(src_handler, categories)
+        src_obj = build_by_name(src_handler, filter)
     elif src_fextension is not None:
-        src_obj = build_by_file_extension(src_fextension, categories)
+        src_obj = build_by_file_extension(src_fextension, filter)
     else:
         raise KeyError('The given file handler is not supported!')
     
     if dest_obj is not None:
-        dest_obj = build_by_name(dest_handler, categories)
+        dest_obj = build_by_name(dest_handler, filter)
     elif src_fextension is not None:
-        dest_obj = build_by_file_extension(dest_fextension, categories)
+        dest_obj = build_by_file_extension(dest_fextension, filter)
     else:
         raise KeyError('The given file handler is not supported!')
     
@@ -144,38 +144,35 @@ def build_converter(
         dest_handler = dest_obj
     )
 
-def convert_file__(src_file : str, dest_file : str, categories : Union[Dict[str, int], List[str]]):
+def convert_file__(src_file : str, dest_file : str, filter : List[str] = None):
     """Wrapping function for converting files.
 
     Args:
         src_file (str): source file path
         dest_file (str): destination file path
-        categories (Union[Dict[str, int], List[str]]): List of categories
+        filter (List[str]): List of classes to be considered
     """
-    src_ext = Path(src_file).suffix.replace('.', '')
-    dest_ext = Path(dest_file).suffix.replace('.', '')
+    src_ext = Path(src_file).suffix[1:]
+    dest_ext = Path(dest_file).suffix[1:]
     
-    build_converter(categories, src_fextension=src_ext, dest_fextension=dest_ext)(
+    build_converter(filter, src_fextension=src_ext, dest_fextension=dest_ext)(
         source_file = src_file,
         dest_file = dest_file
     )
 
-def calculate_stats(files : List[str], categories : Dict[str, int]) -> Tuple[Tuple[str], List[Dict[str, int]]]:
+def calculate_stats(files : List[str], filter : List[str] = None) -> Tuple[Tuple[str], List[Dict[str, int]]]:
     """Calculate statistics for the multi-layer imagery files.
 
     Args:
         files (List[str]): List of multi-layer imagery files
-        categories (Dict[str, int]): categories containing the class names and associated class ids
-
-    Returns:
-        Tuple[Tuple[str], List[Dict[str, int]]]: a tuple containing the list of fields and a dictionary of statistics name and their values.
+        filter (List[str], optional): filter categories. Defaults to None.
 
     Yields:
-        Iterator[Tuple[Tuple[str], List[Dict[str, int]]]]: _description_
+        Iterator[Tuple[Tuple[str], List[Dict[str, int]]]]:  a tuple containing the list of fields and a dictionary of statistics name and their values.
     """
     
     for fin in files:
-        img = load_file(fin, categories)
-        sts = img.get_stats(categories)
+        img = load_file(fin, filter)
+        sts = img.get_stats()
         yield list(sts.keys()), sts
     
