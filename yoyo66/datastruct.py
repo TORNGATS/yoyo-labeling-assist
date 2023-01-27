@@ -76,6 +76,9 @@ class Layer:
         """
         return self.image * self.class_id
     
+    def classmap_rgb(self) -> np.ndarray:
+        return np.array(Image.fromarray(self.classmap().astype('uint8')).convert('RGB'))
+    
     @property
     def dimension(self) -> Tuple[int, int]:
         """ Dimension of the layer
@@ -327,7 +330,10 @@ class phmImage:
             np.ndarray: class map representing the class map using the given categories
         """
         return self.get_classmap(lambda x : np.amax(x, axis = 2))
-
+    
+    def classmap_rgb(self) -> np.ndarray:
+        return np.array(Image.fromarray(self.classmap().astype('uint8')).convert('RGB'))
+        
     def blended_image(self, 
         blending_func : Callable[[np.ndarray, List[np.ndarray]], Any] = default_create_blendimage_func
     ) -> Image:

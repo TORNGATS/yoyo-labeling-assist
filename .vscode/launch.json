@@ -20,10 +20,10 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
-                "--input", "/home/phm/Datasets/Test/*.xcf",
-                "--output", "/home/phm/Datasets/Test_pkg",
+                "--input", "/home/phm/Datasets/Test_pkg/*.pkg",
+                "--output", "/home/phm/Datasets/Test_tiff",
                 "--mode", "directory",
-                "--type", "pkg",
+                "--type", "tiff",
                 // "--classnames", "Crack SurfDeg"
                 // "--categories", "tests/resources/categories.json",
                 // "-s"

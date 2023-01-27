@@ -25,12 +25,15 @@ from yoyo66.utils import convert_file__
 create_out_filepath = lambda fin, fout, type : os.path.join(fout, f'{Path(os.path.basename(fin)).stem}.{get_file_extensions(type)[0]}')
 
 def convert_process(file, outfile, type, override, classnames):
+    print(f' Converting {file} ...')
     ofile = create_out_filepath(file, outfile, type)
     try:
         if not (not override and os.path.isfile(ofile)):
             convert_file__(file, ofile, classnames)
             return True, file
-    except Exception:
+    except Exception as ex:
+        print(f'>>>> {file} is failed to convert')
+        print(str(ex))
         return False, file
 
 def main__():
@@ -92,21 +95,6 @@ def main__():
                     bar.message = res[-1] + 'Successful' if res[0] else 'Failed'
                     bar.next()
 
-        # with Bar(' Converting', max=len(files), suffix='%(percent)d%%') as bar:
-        #     for fin in files:
-        #         outfile = args.output
-        #         bar.message = fin
-        #         outfile = create_out_filepath(fin, outfile, args.type)
-        #         try:
-        #             if not (not args.override and os.path.isfile(outfile)):
-        #                 convert_file__(fin, outfile, args.classnames)
-        #                 print(' Successful')
-        #         except Exception as ex:
-        #             if not args.silent:
-        #                 raise ex
-        #             print(' Failed')
-        #         finally:
-        #             bar.next()
 
 if __name__ == "__main__":
     main__()

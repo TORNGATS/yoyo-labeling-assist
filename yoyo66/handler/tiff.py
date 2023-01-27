@@ -58,7 +58,8 @@ class TiffFileHandler(BaseFileHandler):
                     if class_id is None:
                         continue
                     
-                    img = np.where(np.asarray(img) != 0, 1, 0).astype(np.int8)
+                    img = np.max(np.asarray(img), axis=2) if len(img.shape) > 2 else img
+                    img = np.where(img != 0, 1, 0).astype(np.int8)
                     layers.append(Layer(
                         name = layer_name,
                         class_id = class_id,
@@ -97,10 +98,11 @@ class TiffFileHandler(BaseFileHandler):
             )
             # Save layers
             for layer in img.layers:
-                dd = layer.classmap()
+                # dd = layer.classmap()
+                dd = layer.classmap_rgb()
                 tif.write(dd,
                     dtype = dd.dtype,
-                    photometric = PHOTOMETRIC.MINISBLACK,
+                    photometric = PHOTOMETRIC.RGB,
                     software = 'PHM',
                     compression = 'zlib',
                     extratags=[(285, DATATYPE.ASCII, len(layer.name), layer.name, False)]

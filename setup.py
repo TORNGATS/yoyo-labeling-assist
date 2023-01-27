@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
  
 setuptools.setup(
-    name="YoYo66 Multi-layer Imagary Data Library",
+    name="yoyo66",
     version="1.0.0",
     author="Parham Nooralishahi",
     author_email="parham.nooralishahi@gmail.com",
