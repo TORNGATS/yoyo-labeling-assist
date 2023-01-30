@@ -241,3 +241,4 @@ def load_file(filepath : str, filter : List[str] = None) -> phmImage:
     handler = build_by_file_extension(ext, filter)
     
     return handler.load(filepath)
+

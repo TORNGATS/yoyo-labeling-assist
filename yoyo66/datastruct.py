@@ -151,7 +151,7 @@ class phmImage:
         filepath : str,
         properties : Dict,
         orig_image : np.ndarray,
-        layers : List[Layer],
+        layers : List[Layer] = [],
         title : str = None,
         metrics : Dict = {}
     ):

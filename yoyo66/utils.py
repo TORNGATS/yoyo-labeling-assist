@@ -3,8 +3,13 @@
 import csv
 import glob
 import os.path
+import numpy as np
+
 from pathlib import Path
 from typing import Dict, Any, List, Union, Tuple
+
+from PIL import Image
+from PIL.ExifTags import TAGS, GPSTAGS
 
 from yoyo66.handler import BaseFileHandler, build_by_file_extension, build_by_name
 from yoyo66.handler import (
@@ -15,7 +20,7 @@ from yoyo66.handler import (
     get_file_extensions,
     load_file
 )
-
+from yoyo66.datastruct import phmImage
 
 class ConvertHandler:
     """
@@ -175,4 +180,27 @@ def calculate_stats(files : List[str], filter : List[str] = None) -> Tuple[Tuple
         img = load_file(fin, filter)
         sts = img.get_stats()
         yield list(sts.keys()), sts
+
+def create_from_image(filepath : str) -> phmImage:
+    if not os.path.isfile(filepath):
+        raise FileNotFoundError(f'{filepath} does not exist!')
     
+    img = Image.open(filepath)
+    exif = img.getexif()
+    properties = {}
+    if exif is not None:
+        for key, val in exif.items():
+            tag = TAGS.get(key)
+            if tag is not None:
+                properties[tag] = val
+        for key, val in exif.items():
+            tag = GPSTAGS.get(key)
+            if tag is not None:
+                properties[tag] = val
+
+    return phmImage(
+        filepath = filepath,
+        properties = properties,
+        orig_image = np.array(img),
+        layers = []
+    )
