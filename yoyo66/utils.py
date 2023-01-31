@@ -188,6 +188,7 @@ def create_from_image(filepath : str) -> phmImage:
     img = Image.open(filepath)
     exif = img.getexif()
     properties = {}
+    
     if exif is not None:
         for key, val in exif.items():
             tag = TAGS.get(key)

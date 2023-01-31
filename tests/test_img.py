@@ -12,17 +12,24 @@ sys.path.append(__file__)
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from yoyo66.datastruct import phmImage, Layer, from_image
-from yoyo66.handler.pkg import PKGFileHandler
-from yoyo66.handler.core import build_by_name
+from yoyo66.handler import PKGFileHandler, build_by_name, load_file
+
 from yoyo66.utils import create_from_image
 
 class phmImage_Test(unittest.TestCase):
 
     def test_create(self):
-        file = "/home/phm/Datasets/S1014684.JPG"
+        file = "tests/resources/orig.png"
         img = create_from_image(file)
         pkg = build_by_name('pkg')
-        pkg.save(img, '/home/phm/Datasets/S1014684.pkg')
+        pkg.save(img, 'tests/resources/create_from_img.pkg')
+        
+    def test_load_created_img(self):
+        file = 'tests/resources/create_from_img.pkg'
+        img = load_file(file)
+        print(img.title)
+        print(img.orig_layer.image.shape)
+        
         
 if __name__ == '__main__':
     unittest.main()

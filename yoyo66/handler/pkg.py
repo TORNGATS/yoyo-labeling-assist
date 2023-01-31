@@ -6,11 +6,22 @@ import io
 import numpy as np
 
 from PIL import Image
+from PIL.TiffImagePlugin import IFDRational
 from typing import Dict, List, Union
 from pyora import Project, TYPE_LAYER
 
 from yoyo66.handler import BaseFileHandler, mmfile_handler
 from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY, create_image, from_image
+
+class Exif_JSONEncoder(json.JSONEncoder):
+    """A customized JSON encoder for dealing with Exif special types."""
+
+    # overload method default
+    def default(self, obj):
+        if isinstance(obj, IFDRational):
+            return float(obj)
+        # Call the default method for other types
+        return json.JSONEncoder.default(self, obj)
 
 @mmfile_handler('pkg', ['pkg'])
 class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
@@ -94,7 +105,7 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
             # Save properties
             prop_dict = img.properties
             prop_dict['title'] = img.title
-            prop = json.dumps(prop_dict)
+            prop = json.dumps(prop_dict, cls = Exif_JSONEncoder)
             pkg.writestr(self.__PROP_FILE, prop)
             # Save metrics
             mtr = json.dumps(img.metrics)
