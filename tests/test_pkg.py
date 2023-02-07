@@ -1,6 +1,7 @@
 
 import os
 import sys
+import time
 import unittest
 
 from pyora import Project, TYPE_LAYER, TYPE_GROUP
@@ -18,15 +19,18 @@ from yoyo66.handler.core import build_by_name
 class ORA_Test(unittest.TestCase):
 
     def test_load_without_category(self):
+        st = time.time() * 1000
         file = "tests/resources/pkg_1.pkg"
         pkg = build_by_name('pkg', ['Crack', 'SurfDeg'])
         img = pkg.load(file)
         print(img)
+        et = time.time() * 1000
+        print('Execution time:', et - st, 'miliseconds')
 
     def test_save_with_category(self):
         file = "tests/resources/pkg_1.pkg"
         classes = {'Crack' : 100, 'SurfDeg' : 200}
-        pkg = build_by_name('pkg', classes)
+        pkg = build_by_name('pkg', ['Crack', 'SurfDeg'])
         # Original
         orig = np.asarray(Image.open('tests/resources/orig.png'))
         # Crack
