@@ -4,7 +4,6 @@ import sys
 import time
 import unittest
 
-from pyora import Project, TYPE_LAYER, TYPE_GROUP
 from PIL import Image
 import numpy as np
 
@@ -16,7 +15,7 @@ from yoyo66.datastruct import phmImage, Layer, from_image
 from yoyo66.handler.pkg import PKGFileHandler
 from yoyo66.handler.core import build_by_name
 
-class ORA_Test(unittest.TestCase):
+class PKG_Test(unittest.TestCase):
 
     def test_load_without_category(self):
         st = time.time() * 1000

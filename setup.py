@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
  
 setuptools.setup(
     name="yoyo66",
-    version="1.0.0",
+    version="1.1.0",
     author="Parham Nooralishahi",
     author_email="parham.nooralishahi@gmail.com",
     description="YoYo66 is a library providing a set of functionalities and tools for working with multi-layer images including loading storing, analyzing, and converting.",
@@ -39,6 +39,7 @@ setuptools.setup(
         'gimpformats',
         'Pillow',
         'scikit-image',
+        'h5py'
     ],
     include_package_data=True,
     python_requires='>=3.8'

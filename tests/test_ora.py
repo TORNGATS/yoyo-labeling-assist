@@ -3,7 +3,6 @@ import os
 import sys
 import unittest
 
-from pyora import Project, TYPE_LAYER, TYPE_GROUP
 from PIL import Image
 import numpy as np
 

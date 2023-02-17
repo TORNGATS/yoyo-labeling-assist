@@ -11,7 +11,7 @@ from typing import Dict, List, Union
 from pyora import Project, TYPE_LAYER
 
 from yoyo66.handler import BaseFileHandler, mmfile_handler
-from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY, create_image, from_image
+from yoyo66.datastruct import phmImage, Layer, create_image, from_image
 
 class Exif_JSONEncoder(json.JSONEncoder):
     """A customized JSON encoder for dealing with Exif special types."""
@@ -24,7 +24,7 @@ class Exif_JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 @mmfile_handler('pkg', ['pkg'])
-class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
+class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
     """
     PKG file handler for loading and saving pkg files (*.pkg).
     """
@@ -34,8 +34,8 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, and Gabriel (PKG)
     __PROP_FILE = 'properties.json'
     __METRICS_FILE = 'metrics.json'
 
-    def __init__(self, categories: Union[Dict[str, int], List[str]]) -> None:
-        super().__init__(categories)
+    def __init__(self, filter : List[str] = None) -> None:
+        super().__init__(filter)
         
     def load(self, filepath: str, only_imgs : bool = False) -> phmImage:
         """Load the multi-layer image using the presented file path (pkg file).

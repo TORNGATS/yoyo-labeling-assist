@@ -5,3 +5,4 @@ pyora
 progress
 tifffile
 imagecodecs
+h5py

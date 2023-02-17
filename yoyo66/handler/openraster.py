@@ -22,8 +22,8 @@ class OpenRasterFileHandler(BaseFileHandler):
     __PROPERTIES_KEY = 'prop_'
     __METRICS_KEY = 'metrics_'
 
-    def __init__(self, categories: Union[Dict[str, int], List[str]] = {}) -> None:
-        super().__init__(categories)
+    def __init__(self, filter : List[str] = None) -> None:
+        super().__init__(filter)
     
     def load(self, filepath: str, only_imgs : bool = False) -> phmImage:
         """Load the multi-layer image using the presented file path (openraster file).
