@@ -29,14 +29,13 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
     PKG file handler for loading and saving pkg files (*.pkg).
     """
 
-
     __METAINFO_FILE = 'meta.info'
     __PROP_FILE = 'properties.json'
     __METRICS_FILE = 'metrics.json'
 
     def __init__(self, filter : List[str] = None) -> None:
         super().__init__(filter)
-        
+
     def load(self, filepath: str, only_imgs : bool = False) -> phmImage:
         """Load the multi-layer image using the presented file path (pkg file).
 
@@ -93,7 +92,8 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
         )
 
     def save(self, img: phmImage, filepath: str):
-        """Save a multi-layer image as an pkg file
+        """
+        Save a multi-layer image as an pkg file
 
         Args:
             img (phmImage): Multi-layer image

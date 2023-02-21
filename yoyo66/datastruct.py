@@ -177,6 +177,7 @@ class phmImage:
             image = orig_image,
             x = 0, y = 0
         )
+        
 
     def get_stats(self):
         """Provides statistics about the multi-layer image
@@ -475,3 +476,4 @@ class phmImage:
         else:
             raise ValueError('Key %s is invalid' % key)
         return res
+
