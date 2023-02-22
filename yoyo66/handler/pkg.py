@@ -3,15 +3,87 @@ import random
 import zipfile
 import json
 import io
-import numpy as np
+import os
 
+import numpy as np
+import h5py as hp
+import tempfile as tp
+
+from functools import lru_cache
 from PIL import Image
 from PIL.TiffImagePlugin import IFDRational
-from typing import Dict, List, Union
-from pyora import Project, TYPE_LAYER
+from typing import Dict, List, Any
 
 from yoyo66.handler import BaseFileHandler, mmfile_handler
-from yoyo66.datastruct import phmImage, Layer, create_image, from_image
+from yoyo66.datastruct import phmImage, BaseArchive, Layer, create_image, from_image
+
+class PKGArchive(BaseArchive):
+
+    __ORIG_DIR = 'archive'
+
+    def __init__(self, filepath: str) -> None:
+        super().__init__(filepath)
+        self._handler = None
+
+    def load(self):
+        self._handler = zipfile.ZipFile(self.filepath, mode = 'a')
+
+    def updateAndClose(self):
+        self._handler.close()
+    
+    def check_path(self, path : str):
+        flist = [x.filename for x in self._handler.infolist()]
+        return path in flist
+
+    def get_asset_list(self) -> List[str]:
+        flist = []
+        for fz in self._handler.infolist():
+            fp = fz.filename
+            if fp.startswith(self.__ORIG_DIR):
+                flist.append(self._make_path(fp))
+        return flist
+
+    def get_assets(self) -> Dict[str, np.ndarray]:
+        res = {}
+        for f in self.get_asset_list():
+            arr = self.get_asset(f)
+            res[f] = arr
+        return res
+
+    def set_assets(self, assets : Dict[str, np.ndarray]):
+        for fp, arr in assets.items():
+            self.set_asset(fp, arr)
+
+    def _make_abspath(self, path : str) -> str:
+        gPath = '/'.join(path.split('.'))
+        gPath = f'{gPath}.png'
+        return os.path.join(self.__ORIG_DIR, gPath)
+    
+    def _make_path(self, fpath : str) -> str:
+        fsec = fpath.split('/')[1:]
+        fsec[-1] = fsec[-1].split('.')[0]
+        return '.'.join(fsec)
+
+    @lru_cache(maxsize = 3)
+    def get_asset(self, path : str) -> np.ndarray:
+        gPath = self._make_abspath(path)
+        arr = None
+        if self.check_path(gPath):
+            with self._handler.open(gPath) as gfile:
+                arr = np.array(Image.open(gfile))
+        return arr
+
+    def set_asset(self,
+        path : str, 
+        data : np.ndarray
+    ):
+        gPath = self._make_abspath(path)
+        if self.check_path(gPath):
+            raise KeyError(f'{path} already exist!')
+        orig_io = io.BytesIO()
+        Image.fromarray(data).save(orig_io, format='png')
+        self._handler.writestr(gPath, orig_io.getvalue())
+        orig_io.close()
 
 class Exif_JSONEncoder(json.JSONEncoder):
     """A customized JSON encoder for dealing with Exif special types."""
@@ -83,13 +155,15 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
                     image = img,
                     class_id = class_id))
 
-        return phmImage(
+        entity = phmImage(
             filepath = filepath,
             properties = props,
             metrics = metrics,
             orig_image = orig_img,
-            layers = layers
+            layers = layers,
+            archive = PKGArchive(filepath)
         )
+        return entity
 
     def save(self, img: phmImage, filepath: str):
         """
@@ -142,3 +216,9 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
                 layer_io.close()
             # Save metadata
             pkg.writestr(self.__METAINFO_FILE, json.dumps(img_list))
+        # Save archive
+        if img.archive is not None:
+            with img.archive as imgarc:
+                arc = imgarc.get_assets()
+                with PKGArchive(filepath) as ac:
+                    ac.set_assets(arc)
