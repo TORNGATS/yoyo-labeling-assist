@@ -26,6 +26,39 @@ class PKG_Test(unittest.TestCase):
         et = time.time() * 1000
         print('Execution time:', et - st, 'miliseconds')
 
+    def test_rewite_archive(self):
+        file = "tests/resources/pkg_archive.pkg"
+        pkg = build_by_name('pkg', ['Crack', 'SurfDeg'])
+        img = pkg.load(file)
+        pkg.save(img, "tests/resources/pkg_archive_rewrite.pkg")
+
+    def test_save_archive(self):
+        st = time.time() * 1000
+        file = "tests/resources/pkg_archive.pkg"
+        pkg = build_by_name('pkg', ['Crack', 'SurfDeg'])
+        img = pkg.load(file)
+        print(img)
+        with img.archive as ac:
+            ac.set_asset(
+                path = 'phm.postprocessing.crack',
+                data = from_image(Image.open('tests/resources/crack.png'))
+            )
+            ac.set_asset(
+                path = 'phm.postprocessing.surfdeg',
+                data = from_image(Image.open('tests/resources/surfdeg.png'))
+            )
+        et = time.time() * 1000
+        print('Execution time:', et - st, 'miliseconds')
+
+    def test_load_archive(self):
+        file = "tests/resources/pkg_archive.pkg"
+        pkg = build_by_name('pkg', ['Crack', 'SurfDeg'])
+        img = pkg.load(file)
+        with img.archive as ac:
+            arr = ac.get_asset('phm.postprocessing.crack')
+            print(arr.shape)
+            print(ac.get_assets())
+
     def test_save_with_category(self):
         file = "tests/resources/pkg_1.pkg"
         classes = {'Crack' : 100, 'SurfDeg' : 200}

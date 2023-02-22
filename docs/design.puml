@@ -22,6 +22,7 @@ state "File Handler" as handler {
     state "GIMP (*.xcf)"
     state "OpenRaster (*.ora)"
     state "Multi-page Tiff (*.tif)"
+    state "H5 (*.h5)"
     state "TORNGATS (*.pkg)" as pkg {
         state "Metrics" as pkg_metrics
         state "Properties" as pkg_properties

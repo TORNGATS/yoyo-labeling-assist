@@ -3,7 +3,7 @@
 import functools
 import numbers
 import os
-from abc import ABC
+from abc import ABC, abstractmethod
 from PIL import Image
 from collections import namedtuple
 from dataclasses import dataclass, field
@@ -142,6 +142,57 @@ def default_create_blendimage_func(orig : np.ndarray, layers : List[np.ndarray])
         result = Image.alpha_composite(lorig, blayer.convert('RGBA'))
     return result
 
+class BaseArchive(ABC):
+    def __init__(self, filepath : str) -> None:
+        self.filepath = filepath
+    
+    def __enter__(self):
+        self.load()
+        return self
+
+    def __exit__(self, type, value, traceback) -> None:
+        self.updateAndClose()
+
+    def __setitem__(self, 
+        path : str, 
+        data : np.ndarray
+    ):
+        self.set_asset(path, data)
+
+    def __getitem__(self, path : str) -> np.ndarray:
+        return self.get_asset()
+
+    @abstractmethod
+    def set_assets(self, assets : Dict[str, np.ndarray]):
+        pass
+
+    @abstractmethod
+    def get_assets(self) -> Dict[str, np.ndarray]:
+        pass
+
+    @abstractmethod
+    def get_asset_list(self) -> List[str]:
+        pass
+
+    @abstractmethod
+    def load(self):
+        pass
+
+    @abstractmethod
+    def updateAndClose(self):
+        pass
+
+    @abstractmethod
+    def get_asset(self, path : str) -> np.ndarray:
+        pass
+
+    @abstractmethod
+    def set_asset(self,
+        path : str, 
+        data : np.ndarray
+    ):
+        pass
+        
 class phmImage:
     """ 
     It is the class for the multi-layer image.
@@ -153,7 +204,8 @@ class phmImage:
         orig_image : np.ndarray,
         layers : List[Layer] = [],
         title : str = None,
-        metrics : Dict = {}
+        metrics : Dict = {},
+        archive : BaseArchive = None
     ):
         super().__init__()
         # File path
@@ -177,6 +229,8 @@ class phmImage:
             image = orig_image,
             x = 0, y = 0
         )
+        # Archive
+        self.archive = archive
 
     def get_stats(self):
         """Provides statistics about the multi-layer image
