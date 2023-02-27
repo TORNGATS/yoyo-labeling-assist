@@ -49,8 +49,22 @@ class ConvertHandler:
             raise ValueError('file %s is not valid' % source_file)
         # Loading the multi-layer imagery data from the source file
         img = self.source_handler(source_file)
+        
         if img is None:
             raise ValueError('The coversion process is failed for file %s' % source_file)
+        # FIXME: This is a quick fix for annotations conversion from xcf -> pkg
+        # where the annotation layer must also be saved in the archive not to be
+        # overwritten by subsequent operations (pred, post, etc.) to the pkg.
+        # This needs to be handled better with the cli application.
+        if (isinstance(self.source_handler, GIMPFileHandler) and 
+            isinstance(self.dest_handler, PKGFileHandler)
+            ):
+            img_dict = img.img_to_dict()
+            del img_dict["Original"]
+            with img.archive as iac:
+                for lname, layer in img_dict.items():
+                    iac.set_asset(f"annotations.{lname}", layer)
+        ###########################################################################
         self.dest_handler(dest_file, img)
         
     def convert_dir(self, source_dir : str, dest_dir : str, lazy : bool = True) -> Any:

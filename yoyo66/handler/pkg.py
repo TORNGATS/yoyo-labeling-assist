@@ -50,9 +50,9 @@ class PKGArchive(BaseArchive):
             res[f] = arr
         return res
 
-    def set_assets(self, assets : Dict[str, np.ndarray]):
+    def set_assets(self, assets : Dict[str, np.ndarray], overwrite : bool = False):
         for fp, arr in assets.items():
-            self.set_asset(fp, arr)
+            self.set_asset(fp, arr, overwrite)
 
     def _make_abspath(self, path : str) -> str:
         gPath = '/'.join(path.split('.'))
@@ -75,10 +75,11 @@ class PKGArchive(BaseArchive):
 
     def set_asset(self,
         path : str, 
-        data : np.ndarray
+        data : np.ndarray,
+        overwrite : bool = False
     ):
         gPath = self._make_abspath(path)
-        if self.check_path(gPath):
+        if self.check_path(gPath) and (not overwrite):
             raise KeyError(f'{path} already exist!')
         orig_io = io.BytesIO()
         Image.fromarray(data).save(orig_io, format='png')
