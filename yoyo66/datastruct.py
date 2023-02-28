@@ -430,6 +430,14 @@ class phmImage:
         
         return result
 
+    def get_layer_names(self) -> Tuple[str]:
+        """Provides the layer names
+
+        Returns:
+            Tuple[str]: layer names.
+        """
+        return [layer.name for layer in self.layers]
+
     @property
     def original_layer(self) -> Layer:
         """Original layer of the multi-layer image
@@ -455,7 +463,7 @@ class phmImage:
         Returns:
             Tuple[str]: List of mask layers
         """
-        return self.get_layer_names()
+        return tuple(self.get_layer_names())
 
     @property
     def dimension(self) -> Tuple[int,int]:
