@@ -41,11 +41,13 @@ class PKG_Test(unittest.TestCase):
         with img.archive as ac:
             ac.set_asset(
                 path = 'phm.postprocessing.crack',
-                data = from_image(Image.open('tests/resources/crack.png'))
+                data = from_image(Image.open('tests/resources/crack.png')),
+                overwrite=True
             )
             ac.set_asset(
                 path = 'phm.postprocessing.surfdeg',
-                data = from_image(Image.open('tests/resources/surfdeg.png'))
+                data = from_image(Image.open('tests/resources/surfdeg.png')),
+                overwrite=True
             )
         et = time.time() * 1000
         print('Execution time:', et - st, 'miliseconds')
