@@ -7,7 +7,6 @@ from typing import Dict, Any, List, Tuple
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 
-import yoyo66
 from yoyo66.handler import BaseFileHandler, build_by_file_extension, build_by_name
 from yoyo66.handler import load_file, file_handlers
 from yoyo66.datastruct import phmImage, create_image

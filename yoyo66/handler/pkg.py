@@ -174,12 +174,22 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
             img (phmImage): Multi-layer image
             filepath (str): Path of openraster file
         """
+        
+        if os.path.exists(filepath) and img.archive is not None:
+            with img.archive as ac:
+                old_archives = ac.get_assets()
+        else:
+            old_archives = False
 
         with zipfile.ZipFile(filepath, mode = 'w') as pkg:
             img_list = {}
             # Save properties
             prop_dict = img.properties
             prop_dict['title'] = img.title
+            for key, val in prop_dict.items():
+                if isinstance(val, bytes):
+                    prop_dict[key] = val.hex()
+
             prop = json.dumps(prop_dict, cls = Exif_JSONEncoder)
             pkg.writestr(self.__PROP_FILE, prop)
             # Save metrics
@@ -218,8 +228,8 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
             # Save metadata
             pkg.writestr(self.__METAINFO_FILE, json.dumps(img_list))
         # Save archive
-        if img.archive is not None:
-            with img.archive as imgarc:
-                arc = imgarc.get_assets()
-                with PKGArchive(filepath) as ac:
-                    ac.set_assets(arc)
+        # TODO: handler saving error from yoyo66.
+        # The saving is overwritting the PKGArchive
+        if old_archives:
+            with img.archive as ac:
+                ac.set_assets(old_archives, overwrite=True)

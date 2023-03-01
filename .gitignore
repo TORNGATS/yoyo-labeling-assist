@@ -5,3 +5,4 @@ dist/*
 YoYo66_Multi_layer_Imagary_Data_Library.egg-info/*
 yoyo66.egg-info/*
 .vscode/settings.json
+**/__pycache__
