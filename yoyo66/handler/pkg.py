@@ -1,18 +1,14 @@
-
-import random
 import zipfile
 import json
 import io
 import os
 
 import numpy as np
-import h5py as hp
-import tempfile as tp
 
 from functools import lru_cache
 from PIL import Image
 from PIL.TiffImagePlugin import IFDRational
-from typing import Dict, List, Any
+from typing import Dict, List
 
 from yoyo66.handler import BaseFileHandler, mmfile_handler
 from yoyo66.datastruct import phmImage, BaseArchive, Layer, create_image, from_image
@@ -137,7 +133,7 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
                     metrics = json.loads(f.read())
             # original image
             orig_file = pkg.open(metainfo['original']['file'])
-            orig_img = np.asarray(Image.open(orig_file))
+            orig_img = np.asarray(Image.open(orig_file).convert("RGB"))
             metainfo.pop('original')
             # layers
             for layer_name, info in metainfo.items():
@@ -227,9 +223,8 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
                 layer_io.close()
             # Save metadata
             pkg.writestr(self.__METAINFO_FILE, json.dumps(img_list))
+        
         # Save archive
-        # TODO: handler saving error from yoyo66.
-        # The saving is overwritting the PKGArchive
         if old_archives:
             with img.archive as ac:
                 ac.set_assets(old_archives, overwrite=True)
