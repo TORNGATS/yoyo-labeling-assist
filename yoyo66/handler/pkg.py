@@ -171,7 +171,7 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
             filepath (str): Path of openraster file
         """
         
-        if os.path.exists(filepath) and img.archive is not None:
+        if img.archive is not None:
             with img.archive as ac:
                 old_archives = ac.get_assets()
         else:
