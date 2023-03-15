@@ -20,26 +20,51 @@ Dimension class has two main fields: width and height.
 """
 Dimension = namedtuple('Dimension', ['width', 'height'])
 
-@dataclass
+@dataclass(init=False)
 class Layer:
     """
     Layer is the class for mask layers inside a multi-layer image file.
     """
 
     # name (str) the name of layer 
-    name : str
+    _name : str = field(repr=False, compare=True)
     # opacity (float) the opacity of the layer. Default 1.0
-    opacity : float = field(default=1.0)
+    opacity : float = field(default=1.0, compare=False)
     # visibility (bool) determine whether the layer is hidden (False) or not (True). Default True
-    visibility : bool = field(default=True)
+    visibility : bool = field(default=True, compare=False)
     # Class identifier
-    class_id : int = field(default=1)
+    class_id : int = field(default=1, compare=False)
     # image (PIL.Image) the imagery data of the layer. Default None
-    image : np.ndarray = field(default=None)
+    image : np.ndarray = field(default=None, compare=False)
     # x (int) the x position of the layer. Normally it should be always zero but it can be non-zero in case the layer is smaller than the image size.
-    x : int = field(default=0)
+    x : int = field(default=0, compare=False)
     # y (int) the y position of the layer. Normally it should be always zero but it can be non-zero in case the layer is smaller than the image size.
-    y : int = field(default=0)
+    y : int = field(default=0, compare=False)
+
+    def __init__(self,
+        name: str,
+        opacity: float = 1,
+        visibility: bool = True,
+        class_id: int = 1,
+        image: np.ndarray = None,
+        x: int = 0,
+        y: int = 0
+    ) -> None:
+        self.name = name
+        self.opacity = opacity
+        self.visibility = visibility
+        self.class_id = class_id
+        self.image = image
+        self.x = x
+        self.y = y
+
+    @property
+    def name(self) -> str:
+        return self._name
+    
+    @name.setter
+    def name(self, name):
+        self._name = name.strip().lower()
 
     def is_valid(self) -> bool:
         """ Check if the layer is valid. The image is valid if the image field is initialized!
@@ -142,6 +167,7 @@ def default_create_blendimage_func(orig : np.ndarray, layers : List[np.ndarray])
         result = Image.alpha_composite(lorig, blayer.convert('RGBA'))
     return result
 
+
 class BaseArchive(ABC):
     def __init__(self, filepath : str) -> None:
         self.filepath = filepath
@@ -192,7 +218,7 @@ class BaseArchive(ABC):
         data : np.ndarray
     ):
         pass
-        
+
 class phmImage:
     """ 
     It is the class for the multi-layer image.
@@ -430,6 +456,14 @@ class phmImage:
         
         return result
 
+    def get_layer_names(self) -> Tuple[str]:
+        """Provides the layer names
+
+        Returns:
+            Tuple[str]: layer names.
+        """
+        return [layer.name for layer in self.layers]
+
     @property
     def original_layer(self) -> Layer:
         """Original layer of the multi-layer image
@@ -455,7 +489,7 @@ class phmImage:
         Returns:
             Tuple[str]: List of mask layers
         """
-        return self.get_layer_names()
+        return tuple(self.get_layer_names())
 
     @property
     def dimension(self) -> Tuple[int,int]:

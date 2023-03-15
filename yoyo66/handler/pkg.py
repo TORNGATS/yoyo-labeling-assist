@@ -1,18 +1,14 @@
-
-import random
 import zipfile
 import json
 import io
 import os
 
 import numpy as np
-import h5py as hp
-import tempfile as tp
 
 from functools import lru_cache
 from PIL import Image
 from PIL.TiffImagePlugin import IFDRational
-from typing import Dict, List, Any
+from typing import Dict, List
 
 from yoyo66.handler import BaseFileHandler, mmfile_handler
 from yoyo66.datastruct import phmImage, BaseArchive, Layer, create_image, from_image
@@ -50,9 +46,9 @@ class PKGArchive(BaseArchive):
             res[f] = arr
         return res
 
-    def set_assets(self, assets : Dict[str, np.ndarray]):
+    def set_assets(self, assets : Dict[str, np.ndarray], overwrite : bool = False):
         for fp, arr in assets.items():
-            self.set_asset(fp, arr)
+            self.set_asset(fp, arr, overwrite)
 
     def _make_abspath(self, path : str) -> str:
         gPath = '/'.join(path.split('.'))
@@ -75,10 +71,11 @@ class PKGArchive(BaseArchive):
 
     def set_asset(self,
         path : str, 
-        data : np.ndarray
+        data : np.ndarray,
+        overwrite : bool = False
     ):
         gPath = self._make_abspath(path)
-        if self.check_path(gPath):
+        if self.check_path(gPath) and (not overwrite):
             raise KeyError(f'{path} already exist!')
         orig_io = io.BytesIO()
         Image.fromarray(data).save(orig_io, format='png')
@@ -136,7 +133,7 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
                     metrics = json.loads(f.read())
             # original image
             orig_file = pkg.open(metainfo['original']['file'])
-            orig_img = np.asarray(Image.open(orig_file))
+            orig_img = np.asarray(Image.open(orig_file).convert("RGB"))
             metainfo.pop('original')
             # layers
             for layer_name, info in metainfo.items():
@@ -173,12 +170,22 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
             img (phmImage): Multi-layer image
             filepath (str): Path of openraster file
         """
+        
+        if img.archive is not None:
+            with img.archive as ac:
+                old_archives = ac.get_assets()
+        else:
+            old_archives = False
 
         with zipfile.ZipFile(filepath, mode = 'w') as pkg:
             img_list = {}
             # Save properties
             prop_dict = img.properties
             prop_dict['title'] = img.title
+            for key, val in prop_dict.items():
+                if isinstance(val, bytes):
+                    prop_dict[key] = val.hex()
+
             prop = json.dumps(prop_dict, cls = Exif_JSONEncoder)
             pkg.writestr(self.__PROP_FILE, prop)
             # Save metrics
@@ -216,9 +223,8 @@ class PKGFileHandler(BaseFileHandler): # Parham, Keven, Kevin, and Gabriel (PKG)
                 layer_io.close()
             # Save metadata
             pkg.writestr(self.__METAINFO_FILE, json.dumps(img_list))
+        
         # Save archive
-        if img.archive is not None:
-            with img.archive as imgarc:
-                arc = imgarc.get_assets()
-                with PKGArchive(filepath) as ac:
-                    ac.set_assets(arc)
+        if old_archives:
+            with img.archive as ac:
+                ac.set_assets(old_archives, overwrite=True)

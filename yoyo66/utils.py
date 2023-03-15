@@ -1,26 +1,15 @@
-
-
-import csv
-import glob
 import os.path
 import numpy as np
 
 from pathlib import Path
-from typing import Dict, Any, List, Union, Tuple
+from typing import Dict, Any, List, Tuple
 
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 
 from yoyo66.handler import BaseFileHandler, build_by_file_extension, build_by_name
-from yoyo66.handler import (
-    GIMPFileHandler, 
-    OpenRasterFileHandler, 
-    PKGFileHandler,
-    list_handler_names,
-    get_file_extensions,
-    load_file
-)
-from yoyo66.datastruct import phmImage
+from yoyo66.handler import load_file, file_handlers
+from yoyo66.datastruct import phmImage, create_image
 
 class ConvertHandler:
     """
@@ -47,11 +36,28 @@ class ConvertHandler:
         """
         if not self.source_handler.is_valid(source_file):
             raise ValueError('file %s is not valid' % source_file)
+        
         # Loading the multi-layer imagery data from the source file
-        img = self.source_handler(source_file)
+        img : phmImage = self.source_handler.load(source_file)
         if img is None:
             raise ValueError('The coversion process is failed for file %s' % source_file)
+        
         self.dest_handler(dest_file, img)
+        # FIXME: This is a quick fix for annotations conversion from xcf -> pkg
+        # where the annotation layer must also be saved in the archive. Otherwise it's
+        # overwritten by subsequent operations to the pkg (pred, post, etc.).
+        # This needs to be handled better with the cli application.
+        if (isinstance(self.source_handler, file_handlers['gimp'][0]) and 
+            isinstance(self.dest_handler, file_handlers['pkg'][0])
+            ):
+            img : phmImage = self.dest_handler.load(dest_file)
+            print("Creating archive.")
+            img_dict = img.to_img_dict()
+            del img_dict["Original"]
+            with img.archive as iac:
+                for lname, layer in zip(img.layer_names, img.mask_layers):
+                    iac.set_asset(f"annotations.{lname}", np.array(create_image(layer)))
+        ###########################################################################
         
     def convert_dir(self, source_dir : str, dest_dir : str, lazy : bool = True) -> Any:
         """Convert all files inside a directory to a destination formation
