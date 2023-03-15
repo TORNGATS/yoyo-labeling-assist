@@ -167,6 +167,7 @@ def default_create_blendimage_func(orig : np.ndarray, layers : List[np.ndarray])
         result = Image.alpha_composite(lorig, blayer.convert('RGBA'))
     return result
 
+
 class BaseArchive(ABC):
     def __init__(self, filepath : str) -> None:
         self.filepath = filepath
