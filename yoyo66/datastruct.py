@@ -178,7 +178,6 @@ def default_create_blendimage_func(orig : np.ndarray, layers : List[np.ndarray])
         result = Image.alpha_composite(lorig, blayer.convert('RGBA'))
     return result
 
-
 class BaseArchive(ABC):
     def __init__(self, filepath : str) -> None:
         self.filepath = filepath
@@ -268,6 +267,15 @@ class phmImage:
         )
         # Archive
         self.archive = archive
+
+    def update_from(self, img, only_layers : bool = False):
+        # Update layers
+        self.layers = list(img.layers)
+        if not only_layers:
+            # Update properties
+            self.properties.update(img.properties)
+            # Update metrics
+            self.metrics.update(img.metrics)
 
     def get_stats(self):
         """Provides statistics about the multi-layer image

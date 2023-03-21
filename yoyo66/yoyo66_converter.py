@@ -17,6 +17,8 @@ from yoyo66.handler import (
     GIMPFileHandler, 
     OpenRasterFileHandler, 
     PKGFileHandler,
+    TiffFileHandler,
+    H5FileHandler,
     list_handler_names,
     get_file_extensions
 )

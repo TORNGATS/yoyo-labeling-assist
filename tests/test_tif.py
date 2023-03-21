@@ -19,7 +19,7 @@ class Tif_Test(unittest.TestCase):
 
     def test_load_without_category(self):
         st = time.time() * 1000
-        file = "tests/resources/tif_2.tif"
+        file = "tests/resources/tif_3.tif"
         pkg = build_by_name('tiff', ['Crack', 'SurfDeg'])
         img = pkg.load(file)
         print(img)
