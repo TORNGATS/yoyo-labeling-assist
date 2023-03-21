@@ -101,7 +101,7 @@ class BaseFileHandler(ABC):
         else:
             indexes = random.sample(range(0, 255), len(filter))
             for index in range(len(filter)):
-                self.categories[filter[index]] = indexes[index]
+                self.categories[filter[index].lower().strip()] = indexes[index]
             self._enable_filter = True
 
     def is_valid(self, filepath : str) -> bool:

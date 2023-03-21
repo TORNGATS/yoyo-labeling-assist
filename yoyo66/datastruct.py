@@ -104,6 +104,17 @@ class Layer:
     def classmap_rgb(self) -> np.ndarray:
         return np.array(Image.fromarray(self.classmap().astype('uint8')).convert('RGB'))
     
+    def classmap_rgba(self) -> np.ndarray:
+        img = self.classmap().astype('uint8')
+        alpha = np.zeros(img.shape)
+        alpha = np.where(img > 0, 255, 0)
+        
+        pilimg = Image.fromarray(img).convert('RGBA')
+        pilimg.putalpha(Image.fromarray(alpha.astype('uint8')).convert('L'))
+        
+        # return np.array(Image.fromarray(self.classmap().astype('uint8')).convert('RGBA'))
+        return np.array(pilimg)
+    
     @property
     def dimension(self) -> Tuple[int, int]:
         """ Dimension of the layer
