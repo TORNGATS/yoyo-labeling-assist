@@ -2,7 +2,6 @@
 import os
 import sys
 import argparse
-import json
 import glob
 import csv
 
@@ -13,13 +12,6 @@ sys.path.append(os.getcwd())
 sys.path.append(__file__)
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from yoyo66.handler import (
-    GIMPFileHandler, 
-    OpenRasterFileHandler, 
-    PKGFileHandler,
-    TiffFileHandler,
-    H5FileHandler
-)
 from yoyo66.utils import calculate_stats
 
 def main__():

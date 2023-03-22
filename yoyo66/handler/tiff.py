@@ -2,11 +2,11 @@
 import numpy as np
 import json
 
-from typing import Union, Dict, List
+from typing import List
 from tifffile import TiffFile, TiffWriter, DATATYPE, PHOTOMETRIC
 
 from yoyo66.handler import BaseFileHandler, mmfile_handler
-from yoyo66.datastruct import phmImage, Layer, ORIGINAL_LAYER_KEY, create_image, from_image
+from yoyo66.datastruct import phmImage, Layer
 
 @mmfile_handler('tiff', ['tif'])
 class TiffFileHandler(BaseFileHandler):

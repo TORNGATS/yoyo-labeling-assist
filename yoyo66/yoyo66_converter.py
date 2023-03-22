@@ -14,11 +14,6 @@ sys.path.append(__file__)
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from yoyo66.handler import (
-    GIMPFileHandler, 
-    OpenRasterFileHandler, 
-    PKGFileHandler,
-    TiffFileHandler,
-    H5FileHandler,
     list_handler_names,
     get_file_extensions
 )
