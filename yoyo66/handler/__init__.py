@@ -8,4 +8,5 @@ from .gimp import *
 from .openraster import *
 from .pkg import *
 from .tiff import *
+from .rle import *
 from .hfive import *

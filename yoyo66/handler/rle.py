@@ -8,8 +8,7 @@ import pycocotools.mask as mask_util
 from yoyo66.handler import BaseFileHandler, mmfile_handler
 from yoyo66.datastruct import phmImage, Layer
 
-Array = TypeVar("Array", np.array)
-
+Array = TypeVar("Array", bound=np.array)
 
 @mmfile_handler("rle", ["json"])
 class RLEFileHandler(BaseFileHandler):
@@ -44,10 +43,10 @@ class RLEFileHandler(BaseFileHandler):
         rle["counts"] = encoded_mask["counts"].decode()
         return rle
 
-    def _create_annotations(self, input: List[Layer], file_id: int) -> List[Dict]:
+    def _create_annotations(self, input: List[Layer]) -> List[Dict]:
         annotations = []
         contour: Layer
-        for id_, contour in enumerate(input):
+        for id_, contour in enumerate(input, start=1):
             if contour.image.sum() == 0:
                 continue
             # This function takes the image and fills the contour inside it.
@@ -55,7 +54,7 @@ class RLEFileHandler(BaseFileHandler):
             seg = {
                 "segmentation": enc,
                 "area": int(np.sum(contour.image)),
-                "image_id": file_id,
+                "image_id": 0,
                 "category_id": id_,
                 "iscrowd": 0,
                 "id": 0,
@@ -78,9 +77,12 @@ class RLEFileHandler(BaseFileHandler):
 
         annotations = self._create_annotations(img.layers)
         metadata = {**img.properties, **metrics, "defects": img.layer_names}
-
+        
+        orig_path = filepath.rsplit('.', 1)[0] + '.png'
+        Image.fromarray(img.original_layer.image).save(orig_path)
+        
         rle_file = {
-            self.__ORIGINAL_LAYER: os.path.basename(filepath),
+            self.__ORIGINAL_LAYER: os.path.basename(orig_path),
             "metadata": metadata,
             "annotations": annotations,
         }
@@ -104,16 +106,16 @@ class RLEFileHandler(BaseFileHandler):
         with open(filepath, "r") as rle_fid:
             rle_file = json.load(rle_fid)
 
-        if imgpath := rle_file.get(self.__ORIGINAL_LAYER, False):
+        if not (imgpath := rle_file.get(self.__ORIGINAL_LAYER, False)):
             raise ValueError("Original image path not in rle file.")
         else:
-            imgpath = os.path.join(os.path.pardir(filepath), imgpath)
+            imgpath = os.path.join(os.path.dirname(filepath), imgpath)
             orig_img = np.array(Image.open(imgpath))
 
         metadata = rle_file.get("metadata", {})
         for key, value in metadata.items():
-            if key.startswith(self.__METRIC_STARTKEY):
-                metrics[key.replace(self.__METRIC_STARTKEY, "")] = value
+            if key.startswith(self.__METRIC_KEY):
+                metrics[key.replace(self.__METRIC_KEY, "")] = value
             else:
                 properties[key] = value
 
