@@ -40,9 +40,10 @@ def main__():
     
     files = glob.glob(args.sourcepath)
 
-    fieldnames = []
+    fieldnames, gen_stats = [], {}
     with Bar(' Analyzing', max=len(files), suffix='%(percent)d%%') as bar:
         for fnames, stats in calculate_stats(files, args.classnames):
+            gen_stats[stats['Name']] = stats
             fieldnames.extend(fnames)
             bar.next()
 
@@ -56,7 +57,7 @@ def main__():
                 result[name] = {**r, **stats[name]} if name in stats else r
                 fieldnames.extend(list(r.keys()))
     else:
-        result = stats
+        result =  gen_stats
                 
     # Write the per image stats
     with open(os.path.join(args.output, 'stats.csv'), mode='w') as fout:

@@ -37,10 +37,8 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
-                "/home/phm/Datasets/Pont Donnacona/*.xcf",
-                "--output", "/home/phm/Datasets/",
-                // "--classnames", "Crack SurfDeg",
-                "--statsfile", "/home/phm/Datasets/Pont Donaconna.csv",
+                "/home/gramos/Downloads/setayesh_data/*5.xcf",
+                "-o","/home/gramos/Downloads/setayesh_data"
             ],
         }
     ]

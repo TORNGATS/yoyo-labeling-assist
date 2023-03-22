@@ -183,9 +183,14 @@ def calculate_stats(files : List[str], filter : List[str] = None) -> Tuple[Tuple
     """
     
     for fin in files:
-        img = load_file(fin, filter)
-        sts = img.get_stats()
-        yield list(sts.keys()), sts
+        try:
+            img = load_file(fin, filter)
+            sts = img.get_stats()
+            yield list(sts.keys()), sts
+        except Exception as e:
+            print(f"\nError loading file {fin}")
+            yield list(), {}
+            
 
 def create_from_image(filepath : str) -> phmImage:
     if not os.path.isfile(filepath):
