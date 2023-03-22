@@ -104,6 +104,17 @@ class Layer:
     def classmap_rgb(self) -> np.ndarray:
         return np.array(Image.fromarray(self.classmap().astype('uint8')).convert('RGB'))
     
+    def classmap_rgba(self) -> np.ndarray:
+        img = self.classmap().astype('uint8')
+        alpha = np.zeros(img.shape)
+        alpha = np.where(img > 0, 255, 0)
+        
+        pilimg = Image.fromarray(img).convert('RGBA')
+        pilimg.putalpha(Image.fromarray(alpha.astype('uint8')).convert('L'))
+        
+        # return np.array(Image.fromarray(self.classmap().astype('uint8')).convert('RGBA'))
+        return np.array(pilimg)
+    
     @property
     def dimension(self) -> Tuple[int, int]:
         """ Dimension of the layer
@@ -166,7 +177,6 @@ def default_create_blendimage_func(orig : np.ndarray, layers : List[np.ndarray])
 
         result = Image.alpha_composite(lorig, blayer.convert('RGBA'))
     return result
-
 
 class BaseArchive(ABC):
     def __init__(self, filepath : str) -> None:
@@ -257,6 +267,15 @@ class phmImage:
         )
         # Archive
         self.archive = archive
+
+    def update_from(self, img, only_layers : bool = False):
+        # Update layers
+        self.layers = list(img.layers)
+        if not only_layers:
+            # Update properties
+            self.properties.update(img.properties)
+            # Update metrics
+            self.metrics.update(img.metrics)
 
     def get_stats(self):
         """Provides statistics about the multi-layer image

@@ -1,5 +1,4 @@
 
-import random
 import numpy as np
 import json
 
@@ -49,7 +48,7 @@ class TiffFileHandler(BaseFileHandler):
                     # Loading metadata
                     metadata = json.loads(page.description)
                     for key, value in metadata.items():
-                        if key.startsWith(self.__METRIC_STARTKEY):
+                        if key.startswith(self.__METRIC_STARTKEY):
                             metrics[key.replace(self.__METRIC_STARTKEY, '')] = value
                         else:
                             properties[key] = value
@@ -85,7 +84,7 @@ class TiffFileHandler(BaseFileHandler):
         with TiffWriter(filepath) as tif:
             #  Save Original image
             metrics = {}
-            for k, v in img.metrics:
+            for k, v in img.metrics.items():
                 metrics[f'{self.__METRIC_STARTKEY}{k}'] = v
 
             tif.write(img.orig_layer.image,
@@ -99,7 +98,7 @@ class TiffFileHandler(BaseFileHandler):
             # Save layers
             for layer in img.layers:
                 # dd = layer.classmap()
-                dd = layer.classmap_rgb()
+                dd = layer.classmap_rgba()
                 tif.write(dd,
                     dtype = dd.dtype,
                     photometric = PHOTOMETRIC.RGB,

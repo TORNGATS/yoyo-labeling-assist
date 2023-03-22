@@ -16,7 +16,9 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from yoyo66.handler import (
     GIMPFileHandler, 
     OpenRasterFileHandler, 
-    PKGFileHandler
+    PKGFileHandler,
+    TiffFileHandler,
+    H5FileHandler
 )
 from yoyo66.utils import calculate_stats
 

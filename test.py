@@ -10,3 +10,4 @@ a = 'archive/phm/postprocessing/surfdeg.png'.split('/')
 a[-1] = a[-1].split('.')[0]
 
 print('.'.join(a[1:]))
+

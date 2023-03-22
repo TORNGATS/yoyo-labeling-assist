@@ -40,6 +40,17 @@
                 "/home/gramos/Downloads/setayesh_data/*5.xcf",
                 "-o","/home/gramos/Downloads/setayesh_data"
             ],
+        },
+        {
+            "name": "Python: Editor CLI",
+            "type": "python",
+            "request": "launch",
+            "program": "yoyo66/yoyo66_editor.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "/home/phm/Datasets/Test/pkg_1.pkg"
+            ],
         }
     ]
 }
