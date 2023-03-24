@@ -76,7 +76,12 @@ class RLEFileHandler(BaseFileHandler):
             metrics[f"{self.__METRIC_KEY}{k}"] = v
 
         annotations = self._create_annotations(img.layers)
-        metadata = {**img.properties, **metrics, "defects": img.layer_names}
+        metadata = {
+            **img.properties,
+            "size": img.orig_layer.image.shape[0:2],
+            **metrics,
+            "defects": img.layer_names
+        }
         
         orig_path = filepath.rsplit('.', 1)[0] + '.png'
         Image.fromarray(img.original_layer.image).save(orig_path)
